@@ -8,6 +8,24 @@ Log parser to identify actions which significantly increase VM heap size
 
 === Synopsis
 
+First, install the memory usage logger plugin:
+
+http://github.com/binarylogic/memory_usage_logger/tree/master
+
+After running memory usage logger, install oink to analyze the resulting logs.
+
+Usage: oink [options] files
+    -v, --[no-]verbose               Run verbosely
+    -t, --threshold [INTEGER]        Threshold in MB
+    -f, --file filepath              Output to file
+
+e.g. To find all actions which increase the heap size more than 75 MB, where log files are location in /tmp/logs/
+
+$ oink --threshold=75 /tmp/logs/*
+
+e.g. In verbose mode, oink will print out all the log information from your logs about the actions which exceeded the threshold specified
+
+$ oink --verbose --threshold=75 /tmp/logs/*
 
 === Install
 
