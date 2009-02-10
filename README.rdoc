@@ -1,0 +1,28 @@
+=== Oink
+
+* http://github.com/noahd1/oink
+
+=== Description
+
+Parse through logs to identify ruby on rails actions which increase memory usage
+
+=== Synopsis
+
+
+=== Install
+
+To install the latest release (once there is a release):
+
+    $ sudo gem install oink
+    
+For now, just pull down the code from the GitHub repo:
+    
+    $ git clone git://github.com/noahd1/oink.git
+    $ cd oink
+    $ rake gem
+    $ rake install_gem
+
+=== Authors
+
+- Maintained by Noah Davis
+- Thanks to Weplay (http://weplay.com) for sponsoring development and supporting open sourcing it from the start

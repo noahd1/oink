@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require File.expand_path(File.dirname(__FILE__) + "/../lib/cli")
+require File.expand_path(File.dirname(__FILE__) + "/../lib/oink")
+
+options = { :format => :summary, :threshold => 75 }
+
+opts = OptionParser.new do |opts|
+  opts.banner = "Usage: oink [options] files"
+
+  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+    options[:format] = :verbose if v
+  end
+
+  opts.on("-t", "--threshold [INTEGER]", Integer,
+          "Threshold in MB") do |threshold|
+    options[:threshold] = threshold
+  end
+
+  opts.on("-f", "--file filepath", "Output to file") do |filename|
+    options[:output_file] = filename
+  end
+
+end
+
+opts.parse!
+
+if ARGV.empty?
+  puts opts
+  exit
+end
+
+options[:threshold] *= 1024
+output = nil
+
+if options[:output_file]
+  output = File.open(options[:output_file], 'w')
+else
+  output = STDOUT
+end
+
+files = get_file_listing(ARGV)
+
+handles = files.map { |f| File.open(f) }
+
+Oink.new(handles, options[:threshold], :format => options[:format]).each_line do |line|
+  output.puts line
+end
+
+output.close
+handles.each { |h| h.close }
