@@ -27,6 +27,53 @@ e.g. In verbose mode, oink will print out all the log information from your logs
 
   $ oink --verbose --threshold=75 /tmp/logs/*
 
+In summary mode (the default), oink reports single requests which use the most memory, as well as an aggregate count of which actions used the most memory.
+
+Example summary output:
+
+  Actions using over 75 MB in single request:
+  -- SUMMARY --
+  Rank of Single Time Worst Offenders
+  1. Feb 02 16:26:06, 157524 KB, SportsController#show
+  2. Feb 08 21:35:46, 138640 KB, PublicPagesController#show
+  3. Feb 08 20:04:36, 135524 KB, GroupsController#index
+  4. Feb 02 20:11:54, 134972 KB, DashboardsController#show
+  5. Feb 02 19:06:13, 131912 KB, DashboardsController#show
+  6. Feb 02 08:07:46, 115448 KB, GroupsController#show
+  7. Feb 02 12:19:53, 112924 KB, GroupsController#show
+  8. Feb 02 13:03:00, 112064 KB, ColorSchemesController#show
+  9. Feb 02 13:01:59, 109148 KB, SessionsController#create
+  10. Feb 02 06:11:17, 108456 KB, PublicPagesController#join
+  # of Times, Action
+  16, DashboardsController#show
+  11, PublicPagesController#show
+  11, GroupsController#show
+  10, UsersController#show
+  7, MediaController#show
+  3, SignupsController#create
+  3, SportsController#show
+  2, ColorSchemesController#show
+  2, UsersController#index
+  2, CalendarController#list
+  2, SearchController#groups
+  2, MediaController#index
+  2, GroupInvitesController#by_email
+  1, PhotoVotesController#create
+  1, CommentsController#create
+  1, FriendshipsController#index
+  1, SearchController#all
+  1, LinkedGroupsController#index
+  1, PostsController#show
+  1, SessionsController#create
+  1, AlbumsController#show
+  1, PetitionSignaturesController#create
+  1, AlbumsController#index
+  1, SignupsController#new
+  1, GroupsController#index
+  1, PublicPagesController#join
+  1, DiscussionsController#index
+
+
 === Install
 
 To install the latest release (once there is a release):
