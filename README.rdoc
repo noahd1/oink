@@ -8,11 +8,36 @@ Log parser to identify actions which significantly increase VM heap size
 
 === Synopsis
 
-First, install the memory usage logger plugin:
+Oink works by parsing rails logs to identify actions which significantly increase VM heap size.
 
+Oink produces output which tells you:
+
+1. The top ten single requests which exceeded a given memory threshold, ordered by the request which exceed the threshold the most
+2. The number of times each action exceeded a given memory threshold, ordered by the action which exceeded the threshold the most
+3. (in verbose mode) The log lines produced by requests which exceeded the threshold
+
+== Dependencies
+
+
+Currently oink can only parse logs in the Hodel3000Logger format, which has been amended via a the memory usage logger to add memory usage information.
+
+http://github.com/topfunky/hodel_3000_compliant_logger/tree/master
 http://github.com/binarylogic/memory_usage_logger/tree/master
 
-After running memory usage logger, install oink to analyze the resulting logs.
+=== Install
+
+To install the latest release (once there is a release):
+
+    $ sudo gem install oink
+    
+For now, just pull down the code from the GitHub repo:
+    
+    $ git clone git://github.com/noahd1/oink.git
+    $ cd oink
+    $ rake gem
+    $ rake install_gem
+
+== Usage
 
   Usage: oink [options] files
     -v, --[no-]verbose               Run verbosely
@@ -22,28 +47,12 @@ After running memory usage logger, install oink to analyze the resulting logs.
 e.g. To find all actions which increase the heap size more than 75 MB, where log files are location in /tmp/logs/
 
   $ oink --threshold=75 /tmp/logs/*
-
-e.g. In verbose mode, oink will print out all the log information from your logs about the actions which exceeded the threshold specified
-
-  $ oink --verbose --threshold=75 /tmp/logs/*
-
-In summary mode (the default), oink reports single requests which use the most memory, as well as an aggregate count of which actions used the most memory.
-
-  ---------------------------------------------------------------------
-  Feb 08 11:39:52 ey04-s00301 rails[9076]: Processing UsersController#show (for 24.187.34.45 at 2009-02-08 11:39:52) [GET]
-  Feb 08 11:39:52 ey04-s00301 rails[9076]: Parameters: {"action"=>"show", "id"=>"DerekJeter", "controller"=>"users"}
-  Feb 08 11:39:52 ey04-s00301 rails[9076]: Rendering template within layouts/application
-  Feb 08 11:39:52 ey04-s00301 rails[9076]: Rendering users/show
-  Feb 08 11:39:54 ey04-s00301 rails[9076]: Memory usage: 316516 | PID: 9076
-  Feb 08 11:39:54 ey04-s00301 rails[9076]: Completed in 2008ms (View: 1136, DB: 264) | 200 OK [http://www.weplay.com/users/DerekJeter]
-  ---------------------------------------------------------------------
-
-
+  
   Actions using over 75 MB in single request:
   -- SUMMARY --
   Rank of Single Time Worst Offenders
-  1. Feb 02 16:26:06, 157524 KB, SportsController#show
-  2. Feb 08 21:35:46, 138640 KB, PublicPagesController#show
+  1. Feb 02 16:26:06, 157524 KB, FriendsController#show
+  2. Feb 08 21:35:46, 138640 KB, LanguagesController#show
   3. Feb 08 20:04:36, 135524 KB, GroupsController#index
   4. Feb 02 20:11:54, 134972 KB, DashboardsController#show
   5. Feb 02 19:06:13, 131912 KB, DashboardsController#show
@@ -51,15 +60,15 @@ In summary mode (the default), oink reports single requests which use the most m
   7. Feb 02 12:19:53, 112924 KB, GroupsController#show
   8. Feb 02 13:03:00, 112064 KB, ColorSchemesController#show
   9. Feb 02 13:01:59, 109148 KB, SessionsController#create
-  10. Feb 02 06:11:17, 108456 KB, PublicPagesController#join
+  10. Feb 02 06:11:17, 108456 KB, LanguagesController#join
   # of Times, Action
   16, DashboardsController#show
-  11, PublicPagesController#show
+  11, LanguagesController#show
   11, GroupsController#show
   10, UsersController#show
   7, MediaController#show
   3, SignupsController#create
-  3, SportsController#show
+  3, FriendsController#show
   2, ColorSchemesController#show
   2, UsersController#index
   2, CalendarController#list
@@ -78,23 +87,24 @@ In summary mode (the default), oink reports single requests which use the most m
   1, AlbumsController#index
   1, SignupsController#new
   1, GroupsController#index
-  1, PublicPagesController#join
+  1, LanguagesController#join
   1, DiscussionsController#index
 
+
+e.g. In verbose mode, oink will print out all the log information from your logs about the actions which exceeded the threshold specified
+
+  $ oink --verbose --threshold=75 /tmp/logs/*
+
+  ---------------------------------------------------------------------
+  Feb 08 11:39:52 ey33-s00302 rails[9076]: Processing UsersController#show (for 11.187.34.45 at 2009-02-08 11:39:52) [GET]
+  Feb 08 11:39:52 ey33-s00302 rails[9076]: Parameters: {"action"=>"show", "id"=>"45", "controller"=>"users"}
+  Feb 08 11:39:52 ey33-s00302 rails[9076]: Rendering template within layouts/application
+  Feb 08 11:39:52 ey33-s00302 rails[9076]: Rendering users/show
+  Feb 08 11:39:54 ey33-s00302 rails[9076]: Memory usage: 316516 | PID: 9076
+  Feb 08 11:39:54 ey33-s00302 rails[9076]: Completed in 2008ms (View: 1136, DB: 264) | 200 OK [http://www.example.com/users/45]
+  ---------------------------------------------------------------------
+
 Verbose format prints the summary as well as each action which exceeded the threshold.
-
-=== Install
-
-To install the latest release (once there is a release):
-
-    $ sudo gem install oink
-    
-For now, just pull down the code from the GitHub repo:
-    
-    $ git clone git://github.com/noahd1/oink.git
-    $ cd oink
-    $ rake gem
-    $ rake install_gem
 
 === Authors
 
