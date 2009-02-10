@@ -4,11 +4,13 @@ require File.expand_path(File.dirname(__FILE__) + "/priority_queue")
 
 class Oink
   VERSION = '0.1.0'
+  FORMATS = %w[verbose short-summary summary]
+  FORMAT_ALIASES = { "v" => "verbose", "ss" => "short-summary", "s" => "summary" }
   
   def initialize(input, threshold, options = {})
     @inputs = Array(input)
     @threshold = threshold
-    @format = options[:format] || :summary
+    @format = options[:format] || :short_summary
     
     @pids = {}
     @oinkers = {}
@@ -55,7 +57,7 @@ class Oink
               @oinkers[@pids[pid][:action]] ||= 0
               @oinkers[@pids[pid][:action]] = @oinkers[@pids[pid][:action]] + 1
               date = /^(\w+ \d{2} \d{2}:\d{2}:\d{2})/.match(line).captures[0]
-              @worst_offenses.push(LoggedRequest.new(@pids[pid][:action], date, memory_diff))
+              @worst_offenses.push(LoggedRequest.new(@pids[pid][:action], date, memory_diff, @pids[pid][:buffer]))
               if @format == :verbose
                 @pids[pid][:buffer].each { |b| yield b } 
                 yield "---------------------------------------------------------------------"
@@ -75,6 +77,10 @@ class Oink
     yield "Rank of Single Time Worst Offenders"
     @worst_offenses.each_with_index do |offender, index|
       yield "#{index + 1}. #{offender.datetime}, #{offender.memory} KB, #{offender.action}"
+      if @format == :summary
+        offender.log_lines.each { |b| yield b } 
+        yield "---------------------------------------------------------------------"
+      end
     end
     yield "# of Times, Action"
     @oinkers.sort{|a,b| b[1]<=>a[1]}.each { |elem|

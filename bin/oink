@@ -4,14 +4,10 @@ require 'optparse'
 require File.expand_path(File.dirname(__FILE__) + "/../lib/cli")
 require File.expand_path(File.dirname(__FILE__) + "/../lib/oink")
 
-options = { :format => :summary, :threshold => 75 }
+options = { :format => :short_summary, :threshold => 75 }
 
 opts = OptionParser.new do |opts|
   opts.banner = "Usage: oink [options] files"
-
-  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
-    options[:format] = :verbose if v
-  end
 
   opts.on("-t", "--threshold [INTEGER]", Integer,
           "Threshold in MB") do |threshold|
@@ -20,6 +16,12 @@ opts = OptionParser.new do |opts|
 
   opts.on("-f", "--file filepath", "Output to file") do |filename|
     options[:output_file] = filename
+  end
+
+  format_list = (Oink::FORMAT_ALIASES.keys + Oink::FORMATS).join(',')
+  opts.on("--format FORMAT", Oink::FORMATS, Oink::FORMAT_ALIASES, "Select format",
+          "  (#{format_list})") do |format|
+    options[:format] = format.to_sym
   end
 
 end

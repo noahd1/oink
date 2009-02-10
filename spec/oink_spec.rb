@@ -4,7 +4,7 @@ describe Oink do
 
   TEN_MEGS = 10 * 1024
 
-  describe "summary with frequent offenders" do
+  describe "short summary with frequent offenders" do
   
     it "should report actions which exceed the threshold once" do
       str = <<-STR
