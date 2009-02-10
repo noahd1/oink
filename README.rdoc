@@ -29,7 +29,15 @@ e.g. In verbose mode, oink will print out all the log information from your logs
 
 In summary mode (the default), oink reports single requests which use the most memory, as well as an aggregate count of which actions used the most memory.
 
-Example summary output:
+  ---------------------------------------------------------------------
+  Feb 08 11:39:52 ey04-s00301 rails[9076]: Processing UsersController#show (for 24.187.34.45 at 2009-02-08 11:39:52) [GET]
+  Feb 08 11:39:52 ey04-s00301 rails[9076]: Parameters: {"action"=>"show", "id"=>"DerekJeter", "controller"=>"users"}
+  Feb 08 11:39:52 ey04-s00301 rails[9076]: Rendering template within layouts/application
+  Feb 08 11:39:52 ey04-s00301 rails[9076]: Rendering users/show
+  Feb 08 11:39:54 ey04-s00301 rails[9076]: Memory usage: 316516 | PID: 9076
+  Feb 08 11:39:54 ey04-s00301 rails[9076]: Completed in 2008ms (View: 1136, DB: 264) | 200 OK [http://www.weplay.com/users/DerekJeter]
+  ---------------------------------------------------------------------
+
 
   Actions using over 75 MB in single request:
   -- SUMMARY --
@@ -73,6 +81,7 @@ Example summary output:
   1, PublicPagesController#join
   1, DiscussionsController#index
 
+Verbose format prints the summary as well as each action which exceeded the threshold.
 
 === Install
 
