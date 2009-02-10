@@ -1,6 +1,7 @@
 require 'rubygems'
 require "rake/gempackagetask"
 require "rake/clean"
+require "spec/rake/spectask"
 require './lib/oink.rb'
 
 spec = Gem::Specification.new do |s|
@@ -9,15 +10,22 @@ spec = Gem::Specification.new do |s|
   s.author       = "Noah Davis"
   s.email        = "noahd1" + "@" + "yahoo.com"
   s.homepage     = "http://github.com/noahd1/oink"
-  s.summary      = "Parse through logs to identify ruby on rails actions which increase memory usage"
+  s.summary      = "Log parser to identify actions which significantly increase VM heap size"
   s.description  = s.summary
   s.executables  = "oink"
   s.files        = %w[History.txt MIT-LICENSE.txt README.rdoc Rakefile] + Dir["bin/*"] + Dir["lib/**/*"]
 end
 
+Spec::Rake::SpecTask.new do |t|
+  t.spec_opts == ["--color"]
+end
+
 Rake::GemPackageTask.new(spec) do |package|
   package.gem_spec = spec
 end
+
+desc "Run the specs"
+task :default => ["spec"]
 
 desc 'Show information about the gem.'
 task :write_gemspec do

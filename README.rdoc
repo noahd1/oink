@@ -4,7 +4,7 @@
 
 === Description
 
-Parse through logs to identify ruby on rails actions which increase memory usage
+Log parser to identify actions which significantly increase VM heap size
 
 === Synopsis
 
