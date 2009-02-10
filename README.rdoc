@@ -18,11 +18,10 @@ Oink produces output which tells you:
 
 == Dependencies
 
-
 Currently oink can only parse logs in the Hodel3000Logger format, which has been amended via a the memory usage logger to add memory usage information.
 
-http://github.com/topfunky/hodel_3000_compliant_logger/tree/master
-http://github.com/binarylogic/memory_usage_logger/tree/master
+- http://github.com/topfunky/hodel_3000_compliant_logger/tree/master
+- http://github.com/binarylogic/memory_usage_logger/tree/master
 
 === Install
 
