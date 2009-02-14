@@ -229,6 +229,29 @@ describe Oink do
       end
       output[1..4].should == str.split("\n")[4..7].map { |o| o.strip }
     end
+    
+    it "should handle actions which do not complete properly" do
+      threshold = 10
+  
+      str = <<-STR
+      Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+      Feb 01 01:58:30 ey04-s00297 rails[4413]: Memory usage: 0 | PID: 4413
+      Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing MediaController#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+      Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing MediaController#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+      Feb 01 01:58:30 ey04-s00297 rails[4413]: Memory usage: #{TEN_MEGS + 1} | PID: 4413
+      Feb 01 01:58:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+      Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing ActorController#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+      Feb 01 01:58:30 ey04-s00297 rails[4413]: Memory usage: #{(TEN_MEGS * 2) + 2} | PID: 4413
+      Feb 01 01:58:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+      STR
+  
+      io = StringIO.new(str)
+      output = []
+      Oink.new(io, TEN_MEGS, :format => :verbose).each_line do |line|
+        output << line
+      end
+      output[1..3].should == str.split("\n")[6..8].map { |o| o.strip }
+    end    
   end
 
   describe "multiple io streams" do
@@ -262,5 +285,5 @@ describe Oink do
     end
 
   end
-
+  
 end

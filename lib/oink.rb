@@ -28,10 +28,7 @@ class Oink
 
         if line =~ /rails\[(\d+)\]/
           pid = $1
-
-          unless @pids[pid]
-            @pids[pid] = { :buffer => [], :last_memory_reading => -1, :current_memory_reading => -1, :action => "", :request_finished => true }
-          end
+          @pids[pid] ||= { :buffer => [], :last_memory_reading => -1, :current_memory_reading => -1, :action => "", :request_finished => true }
           @pids[pid][:buffer] << line
         end
 
