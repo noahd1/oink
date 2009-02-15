@@ -1,0 +1,4 @@
+- create installrb/uninstallrb to move oink executable into script folder
+- parse logs for ActiveRecord count + specs
+- license for memory usage logger
+- enable plugin, determine how to enable plugin without settings
