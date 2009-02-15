@@ -7,20 +7,21 @@ class Oink
   FORMATS = %w[verbose short-summary summary]
   FORMAT_ALIASES = { "v" => "verbose", "ss" => "short-summary", "s" => "summary" }
   
-  def initialize(input, threshold, options = {})
+  def initialize(input, options = {})
     @inputs = Array(input)
-    @threshold = threshold
+    @mem_threshold = options[:mem_threshold] || 75 * 1024
     @format = options[:format] || :short_summary
     
     @pids = {}
-    @oinkers = {}
-    @worst_offenses = PriorityQueue.new(10)
-    @earliest = nil
-    @latest = nil
+    @repeat_memory_offenders = {}
+    @onetime_memory_offenders = PriorityQueue.new(10)
   end
   
   def each_line
-    yield "Actions using over #{@threshold/1024} MB in single request:"
+    yield "---- MEMORY THRESHOLD ----"
+    yield "THRESHOLD: #{@mem_threshold/1024} MB\n"
+    
+    yield "\n-- REQUESTS --\n" if @format == :verbose
     
     @inputs.each do |input|
       input.each_line do |line|
@@ -50,11 +51,11 @@ class Oink
           @pids[pid][:request_finished] = true
           unless @pids[pid][:current_memory_reading] == -1 || @pids[pid][:last_memory_reading] == -1
             memory_diff = @pids[pid][:current_memory_reading] - @pids[pid][:last_memory_reading]
-            if memory_diff > @threshold
-              @oinkers[@pids[pid][:action]] ||= 0
-              @oinkers[@pids[pid][:action]] = @oinkers[@pids[pid][:action]] + 1
+            if memory_diff > @mem_threshold
+              @repeat_memory_offenders[@pids[pid][:action]] ||= 0
+              @repeat_memory_offenders[@pids[pid][:action]] = @repeat_memory_offenders[@pids[pid][:action]] + 1
               date = /^(\w+ \d{2} \d{2}:\d{2}:\d{2})/.match(line).captures[0]
-              @worst_offenses.push(LoggedRequest.new(@pids[pid][:action], date, memory_diff, @pids[pid][:buffer]))
+              @onetime_memory_offenders.push(LoggedRequest.new(@pids[pid][:action], date, memory_diff, @pids[pid][:buffer]))
               if @format == :verbose
                 @pids[pid][:buffer].each { |b| yield b } 
                 yield "---------------------------------------------------------------------"
@@ -68,19 +69,18 @@ class Oink
         end # end elsif
       end # end each_line
     end # end each input
-    
-    yield "From #{@earliest.strftime('%m %d %Y')} to #{@latest.strftime('%m %d %Y')}" if @earliest && @latest
-    yield "-- SUMMARY --"
-    yield "Rank of Single Time Worst Offenders"
-    @worst_offenses.each_with_index do |offender, index|
+
+    yield "\n-- SUMMARY --\n"
+    yield "Worst Requests:"
+    @onetime_memory_offenders.each_with_index do |offender, index|
       yield "#{index + 1}. #{offender.datetime}, #{offender.memory} KB, #{offender.action}"
       if @format == :summary
         offender.log_lines.each { |b| yield b } 
         yield "---------------------------------------------------------------------"
       end
     end
-    yield "# of Times, Action"
-    @oinkers.sort{|a,b| b[1]<=>a[1]}.each { |elem|
+    yield "\nWorst Actions"
+    @repeat_memory_offenders.sort{|a,b| b[1]<=>a[1]}.each { |elem|
       yield "#{elem[1]}, #{elem[0]}"
     }
   end

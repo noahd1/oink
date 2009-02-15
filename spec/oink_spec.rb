@@ -18,7 +18,7 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, TEN_MEGS).each_line do |line|
+      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
         output << line
       end
       output.should include("1, MediaController#show")
@@ -39,7 +39,7 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, TEN_MEGS).each_line do |line|
+      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
         output << line
       end
       output.should include("2, MediaController#show")
@@ -63,7 +63,7 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, TEN_MEGS).each_line do |line|
+      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
         output << line
       end
       output[-2].should == "2, MediaController#show"
@@ -84,7 +84,7 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, TEN_MEGS).each_line do |line|
+      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
         output << line
       end
       output.should_not include("1, MediaController#show")
@@ -104,7 +104,7 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, TEN_MEGS).each_line do |line|
+      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
         output << line
       end
       output.should_not include("1, MediaController#show")
@@ -122,7 +122,7 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, TEN_MEGS).each_line do |line|
+      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
         output << line
       end
       output.should_not include("1, MediaController#show")
@@ -142,7 +142,7 @@ describe Oink do
 
         io = StringIO.new(str)
         output = []
-        Oink.new(io, TEN_MEGS).each_line do |line|
+        Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
           output << line
         end
         output.should include("1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show")
@@ -160,7 +160,7 @@ describe Oink do
         
         io = StringIO.new(str)
         output = []
-        Oink.new(io, TEN_MEGS).each_line do |line|
+        Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
           output << line
         end
         output.should_not include("1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show")
@@ -181,11 +181,11 @@ describe Oink do
         
         io = StringIO.new(str)
         output = []
-        Oink.new(io, TEN_MEGS).each_line do |line|
+        Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
           output << line
         end
-        output[3].should == "1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show"
-        output[4].should == "2. Feb 01 01:58:37, #{TEN_MEGS + 1} KB, DetailsController#show"
+        output[4].should == "1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show"
+        output[5].should == "2. Feb 01 01:58:37, #{TEN_MEGS + 1} KB, DetailsController#show"
       end
       
     end
@@ -224,10 +224,10 @@ describe Oink do
       STR
       io = StringIO.new(str)
       output = []
-      Oink.new(io, TEN_MEGS, :format => :verbose).each_line do |line|
+      Oink.new(io, :mem_threshold => TEN_MEGS, :format => :verbose).each_line do |line|
         output << line
       end
-      output[1..4].should == str.split("\n")[4..7].map { |o| o.strip }
+      output[3..6].should == str.split("\n")[4..7].map { |o| o.strip }
     end
     
     it "should handle actions which do not complete properly" do
@@ -247,10 +247,10 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, TEN_MEGS, :format => :verbose).each_line do |line|
+      Oink.new(io, :mem_threshold => TEN_MEGS, :format => :verbose).each_line do |line|
         output << line
       end
-      output[1..3].should == str.split("\n")[6..8].map { |o| o.strip }
+      output[3..5].should == str.split("\n")[6..8].map { |o| o.strip }
     end    
   end
 
@@ -278,7 +278,7 @@ describe Oink do
       io1 = StringIO.new(str1)
       io2 = StringIO.new(str2)
       output = []
-      Oink.new([io1, io2], TEN_MEGS).each_line do |line|
+      Oink.new([io1, io2], :mem_threshold => TEN_MEGS).each_line do |line|
         output << line
       end
       output.should include("2, MediaController#show")

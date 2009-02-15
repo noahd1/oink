@@ -4,14 +4,14 @@ require 'optparse'
 require File.expand_path(File.dirname(__FILE__) + "/../lib/cli")
 require File.expand_path(File.dirname(__FILE__) + "/../lib/oink")
 
-options = { :format => :short_summary, :threshold => 75 }
+options = { :format => :short_summary, :mem_threshold => 75 }
 
 opts = OptionParser.new do |opts|
   opts.banner = "Usage: oink [options] files"
 
-  opts.on("-t", "--threshold [INTEGER]", Integer,
-          "Threshold in MB") do |threshold|
-    options[:threshold] = threshold
+  opts.on("-t", "--mem-threshold [INTEGER]", Integer,
+          "Memory threshold in MB") do |mem_threshold|
+    options[:mem_threshold] = mem_threshold
   end
 
   opts.on("-f", "--file filepath", "Output to file") do |filename|
@@ -33,7 +33,7 @@ if ARGV.empty?
   exit
 end
 
-options[:threshold] *= 1024
+options[:mem_threshold] *= 1024
 output = nil
 
 if options[:output_file]
@@ -46,7 +46,7 @@ files = get_file_listing(ARGV)
 
 handles = files.map { |f| File.open(f) }
 
-Oink.new(handles, options[:threshold], :format => options[:format]).each_line do |line|
+Oink.new(handles, :mem_threshold => options[:mem_threshold], :format => options[:format]).each_line do |line|
   output.puts line
 end
 
