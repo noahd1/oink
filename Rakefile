@@ -2,18 +2,18 @@ require 'rubygems'
 require "rake/gempackagetask"
 require "rake/clean"
 require "spec/rake/spectask"
-require './lib/oink.rb'
+require './lib/oink/oink_for_memory.rb'
 
 spec = Gem::Specification.new do |s|
   s.name         = "oink"
-  s.version      = Oink::VERSION
+  s.version      = OinkForMemory::VERSION
   s.author       = "Noah Davis"
   s.email        = "noahd1" + "@" + "yahoo.com"
   s.homepage     = "http://github.com/noahd1/oink"
   s.summary      = "Log parser to identify actions which significantly increase VM heap size"
   s.description  = s.summary
   s.executables  = "oink"
-  s.files        = %w[History.txt MIT-LICENSE.txt README.rdoc Rakefile] + Dir["bin/*"] + Dir["lib/**/*"]
+  s.files        = %w[History.txt MIT-LICENSE README.rdoc Rakefile] + Dir["bin/*"] + Dir["lib/**/*"]
 end
 
 Spec::Rake::SpecTask.new do |t|

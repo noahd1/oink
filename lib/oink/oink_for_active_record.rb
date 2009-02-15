@@ -1,6 +1,7 @@
 require "date"
-require File.expand_path(File.dirname(__FILE__) + "/oink/logged_request/logged_active_record_request")
-require File.expand_path(File.dirname(__FILE__) + "/oink/priority_queue/priority_queue")
+
+require "oink/logged_request/logged_active_record_request"
+require "oink/priority_queue/priority_queue"
 
 class OinkForActiveRecord
   VERSION = '0.1.0'
@@ -29,13 +30,17 @@ class OinkForActiveRecord
 
         if line =~ /rails\[(\d+)\]/
           pid = $1
-          @pids[pid] ||= { :buffer => [], :ar_count => -1, :action => "" }
+          @pids[pid] ||= { :buffer => [], :ar_count => -1, :action => "", :request_finished => true }
           @pids[pid][:buffer] << line
         end
 
         if line =~ /Processing ((\w+)#(\w+)) /
 
           @pids[pid][:action] = $1
+          unless @pids[pid][:request_finished]
+            @pids[pid][:buffer] = [line]
+          end
+          @pids[pid][:request_finished] = false
       
         elsif line =~ /Instantiated (\d+) ActiveRecord objects/
 
@@ -53,7 +58,8 @@ class OinkForActiveRecord
               yield "---------------------------------------------------------------------"
             end
           end
-
+          
+          @pids[pid][:request_finished] = true
           @pids[pid][:buffer] = []
           @pids[pid][:ar_count] = -1
         

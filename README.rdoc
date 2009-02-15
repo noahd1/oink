@@ -4,8 +4,6 @@
 
 === Description
 
-Apologies - this documentation is a bit out of date. Oink is moving away from being a gem into being a rails plugin. Documentation (and code) forthcoming.
-
 Log parser to identify actions which significantly increase VM heap size
 
 === Synopsis

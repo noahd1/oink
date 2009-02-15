@@ -2,9 +2,10 @@
 
 require 'optparse'
 
-require File.expand_path(File.dirname(__FILE__) + "/../lib/oink_for_memory")
-require File.expand_path(File.dirname(__FILE__) + "/../lib/oink_for_active_record")
-require File.expand_path(File.dirname(__FILE__) + "/../lib/oink/cli")
+$:.unshift(File.dirname(__FILE__ + '.rb') + '/../lib') unless $:.include?(File.dirname(__FILE__ + '.rb') + '/../lib')
+
+require "oink"
+require "oink/cli"
 
 options = { :format => :short_summary, :type => :memory }
 

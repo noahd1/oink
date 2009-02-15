@@ -1,4 +1,6 @@
 - create installrb/uninstallrb to move oink executable into script folder
-- parse logs for ActiveRecord count + specs
+- refactor to a oink base class
+- update documentation
+- create/publish gem
+- fix failing spec
 - license for memory usage logger
-- enable plugin, determine how to enable plugin without settings

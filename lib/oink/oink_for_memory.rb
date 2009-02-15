@@ -1,6 +1,6 @@
 require "date"
-require File.expand_path(File.dirname(__FILE__) + "/oink/logged_request/logged_memory_request")
-require File.expand_path(File.dirname(__FILE__) + "/oink/priority_queue/priority_queue")
+require "oink/logged_request/logged_memory_request"
+require "oink/priority_queue/priority_queue"
 
 class OinkForMemory
   VERSION = '0.1.0'
