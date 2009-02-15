@@ -2,5 +2,4 @@
 - refactor to a oink base class
 - update documentation
 - create/publish gem
-- fix failing spec
 - license for memory usage logger
