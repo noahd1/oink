@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 
 require 'optparse'
-require File.expand_path(File.dirname(__FILE__) + "/../lib/cli")
+
 require File.expand_path(File.dirname(__FILE__) + "/../lib/oink")
+require File.expand_path(File.dirname(__FILE__) + "/../lib/oink/cli")
 
 options = { :format => :short_summary, :mem_threshold => 75 }
 

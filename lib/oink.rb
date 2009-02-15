@@ -1,6 +1,7 @@
 require "date"
-require File.expand_path(File.dirname(__FILE__) + "/logged_request")
-require File.expand_path(File.dirname(__FILE__) + "/priority_queue")
+require File.expand_path(File.dirname(__FILE__) + "/oink/logged_request/logged_memory_request")
+require File.expand_path(File.dirname(__FILE__) + "/oink/logged_request/logged_active_record_request")
+require File.expand_path(File.dirname(__FILE__) + "/oink/priority_queue/priority_queue")
 
 class Oink
   VERSION = '0.1.0'
@@ -55,13 +56,14 @@ class Oink
               @repeat_memory_offenders[@pids[pid][:action]] ||= 0
               @repeat_memory_offenders[@pids[pid][:action]] = @repeat_memory_offenders[@pids[pid][:action]] + 1
               date = /^(\w+ \d{2} \d{2}:\d{2}:\d{2})/.match(line).captures[0]
-              @onetime_memory_offenders.push(LoggedRequest.new(@pids[pid][:action], date, memory_diff, @pids[pid][:buffer]))
+              @onetime_memory_offenders.push(LoggedMemoryRequest.new(@pids[pid][:action], date, @pids[pid][:buffer], memory_diff))
               if @format == :verbose
                 @pids[pid][:buffer].each { |b| yield b } 
                 yield "---------------------------------------------------------------------"
               end
             end
           end
+          
           @pids[pid][:buffer] = []
           @pids[pid][:last_memory_reading] = @pids[pid][:current_memory_reading]
           @pids[pid][:current_memory_reading] = -1
@@ -83,6 +85,7 @@ class Oink
     @repeat_memory_offenders.sort{|a,b| b[1]<=>a[1]}.each { |elem|
       yield "#{elem[1]}, #{elem[0]}"
     }
+    
   end
 
 end
