@@ -2,27 +2,36 @@
 
 require 'optparse'
 
-require File.expand_path(File.dirname(__FILE__) + "/../lib/oink")
+require File.expand_path(File.dirname(__FILE__) + "/../lib/oink_for_memory")
+require File.expand_path(File.dirname(__FILE__) + "/../lib/oink_for_active_record")
 require File.expand_path(File.dirname(__FILE__) + "/../lib/oink/cli")
 
-options = { :format => :short_summary, :mem_threshold => 75 }
+options = { :format => :short_summary, :type => :memory }
 
 opts = OptionParser.new do |opts|
   opts.banner = "Usage: oink [options] files"
 
-  opts.on("-t", "--mem-threshold [INTEGER]", Integer,
-          "Memory threshold in MB") do |mem_threshold|
-    options[:mem_threshold] = mem_threshold
+  opts.on("-t", "--threshold [INTEGER]", Integer,
+          "Memory threshold in MB") do |threshold|
+    options[:threshold] = threshold
   end
 
   opts.on("-f", "--file filepath", "Output to file") do |filename|
     options[:output_file] = filename
   end
 
-  format_list = (Oink::FORMAT_ALIASES.keys + Oink::FORMATS).join(',')
-  opts.on("--format FORMAT", Oink::FORMATS, Oink::FORMAT_ALIASES, "Select format",
+  format_list = (OinkForMemory::FORMAT_ALIASES.keys + OinkForMemory::FORMATS).join(',')
+  opts.on("--format FORMAT", OinkForMemory::FORMATS, OinkForMemory::FORMAT_ALIASES, "Select format",
           "  (#{format_list})") do |format|
     options[:format] = format.to_sym
+  end
+
+  opts.on("-m", "--memory", "Check for Memory Threshold (default)") do |v|
+     options[:type] = :memory
+  end
+
+  opts.on("-r", "--active-record", "Check for Active Record Threshold") do |v|
+     options[:type] = :active_record
   end
 
 end
@@ -34,7 +43,6 @@ if ARGV.empty?
   exit
 end
 
-options[:mem_threshold] *= 1024
 output = nil
 
 if options[:output_file]
@@ -47,8 +55,23 @@ files = get_file_listing(ARGV)
 
 handles = files.map { |f| File.open(f) }
 
-Oink.new(handles, :mem_threshold => options[:mem_threshold], :format => options[:format]).each_line do |line|
-  output.puts line
+if options[:type] == :memory
+
+  options[:threshold] ||= 75
+  options[:threshold] *= 1024
+
+  OinkForMemory.new(handles, options[:threshold], :format => options[:format]).each_line do |line|
+    output.puts line
+  end
+
+elsif options[:type] == :active_record
+  
+  options[:threshold] ||= 500
+  
+  OinkForActiveRecord.new(handles, options[:threshold], :format => options[:format]).each_line do |line|
+    output.puts line
+  end
+    
 end
 
 output.close

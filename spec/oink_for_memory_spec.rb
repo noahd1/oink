@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + "/spec_helper")
 
-describe Oink do
+describe OinkForMemory do
 
   TEN_MEGS = 10 * 1024
 
@@ -18,10 +18,30 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
+      OinkForMemory.new(io, TEN_MEGS).each_line do |line|
         output << line
       end
       output.should include("1, MediaController#show")
+    end
+    
+    it "should not report actions which do not exceed the threshold" do
+      threshold = 10
+  
+      str = <<-STR
+      Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+      Feb 01 01:58:30 ey04-s00297 rails[4413]: Memory usage: 0 | PID: 4413
+      Feb 01 01:58:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+      Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing MediaController#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+      Feb 01 01:58:30 ey04-s00297 rails[4413]: Memory usage: #{TEN_MEGS} | PID: 4413
+      Feb 01 01:58:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK    
+      STR
+  
+      io = StringIO.new(str)
+      output = []
+      OinkForMemory.new(io, TEN_MEGS).each_line do |line|
+        output << line
+      end
+      output.should_not include("1, MediaController#show")
     end
     
     it "should report actions which exceed the threshold multiple times" do
@@ -39,7 +59,7 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
+      OinkForMemory.new(io, TEN_MEGS).each_line do |line|
         output << line
       end
       output.should include("2, MediaController#show")
@@ -63,31 +83,11 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
+      OinkForMemory.new(io, TEN_MEGS).each_line do |line|
         output << line
       end
       output[-2].should == "2, MediaController#show"
       output[-1].should == "1, Users#show"
-    end
-    
-    it "should not report actions which do not exceed the threshold" do
-      threshold = 10
-  
-      str = <<-STR
-      Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
-      Feb 01 01:58:30 ey04-s00297 rails[4413]: Memory usage: 0 | PID: 4413
-      Feb 01 01:58:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
-      Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing MediaController#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
-      Feb 01 01:58:30 ey04-s00297 rails[4413]: Memory usage: #{TEN_MEGS} | PID: 4413
-      Feb 01 01:58:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK    
-      STR
-  
-      io = StringIO.new(str)
-      output = []
-      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
-        output << line
-      end
-      output.should_not include("1, MediaController#show")
     end
     
     it "should not report actions which do not complete properly" do
@@ -104,7 +104,7 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
+      OinkForMemory.new(io, TEN_MEGS).each_line do |line|
         output << line
       end
       output.should_not include("1, MediaController#show")
@@ -122,7 +122,7 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
+      OinkForMemory.new(io, TEN_MEGS).each_line do |line|
         output << line
       end
       output.should_not include("1, MediaController#show")
@@ -130,7 +130,7 @@ describe Oink do
     
     describe "summary with top 10 offenses" do
       
-      it "should only report offenses over threshold" do
+      it "should only report requests over threshold" do
         str = <<-STR
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Memory usage: 0 | PID: 4413
@@ -142,13 +142,13 @@ describe Oink do
 
         io = StringIO.new(str)
         output = []
-        Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
+        OinkForMemory.new(io, TEN_MEGS).each_line do |line|
           output << line
         end
         output.should include("1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show")
       end
       
-      it "should not include offenses under the threshold" do
+      it "should not include requests which are not over the threshold" do
         str = <<-STR
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Memory usage: 0 | PID: 4413
@@ -160,7 +160,7 @@ describe Oink do
         
         io = StringIO.new(str)
         output = []
-        Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
+        OinkForMemory.new(io, TEN_MEGS).each_line do |line|
           output << line
         end
         output.should_not include("1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show")
@@ -181,7 +181,7 @@ describe Oink do
         
         io = StringIO.new(str)
         output = []
-        Oink.new(io, :mem_threshold => TEN_MEGS).each_line do |line|
+        OinkForMemory.new(io, TEN_MEGS).each_line do |line|
           output << line
         end
         output[4].should == "1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show"
@@ -202,7 +202,7 @@ describe Oink do
     #   
     #   io = StringIO.new(str)
     #   output = []
-    #   Oink.new(io, TEN_MEGS).each_line do |line|
+    #   OinkForMemory.new(io, TEN_MEGS).each_line do |line|
     #     output << line
     #   end
     #   output.first.should == "Feb 01 01:58:29 - Mar 13 03:58:30"
@@ -224,7 +224,7 @@ describe Oink do
       STR
       io = StringIO.new(str)
       output = []
-      Oink.new(io, :mem_threshold => TEN_MEGS, :format => :verbose).each_line do |line|
+      OinkForMemory.new(io, TEN_MEGS, :format => :verbose).each_line do |line|
         output << line
       end
       output[3..6].should == str.split("\n")[4..7].map { |o| o.strip }
@@ -247,11 +247,11 @@ describe Oink do
   
       io = StringIO.new(str)
       output = []
-      Oink.new(io, :mem_threshold => TEN_MEGS, :format => :verbose).each_line do |line|
+      OinkForMemory.new(io, TEN_MEGS, :format => :verbose).each_line do |line|
         output << line
       end
       output[3..5].should == str.split("\n")[6..8].map { |o| o.strip }
-    end    
+    end
   end
 
   describe "multiple io streams" do
@@ -278,7 +278,7 @@ describe Oink do
       io1 = StringIO.new(str1)
       io2 = StringIO.new(str2)
       output = []
-      Oink.new([io1, io2], :mem_threshold => TEN_MEGS).each_line do |line|
+      OinkForMemory.new([io1, io2], TEN_MEGS).each_line do |line|
         output << line
       end
       output.should include("2, MediaController#show")
