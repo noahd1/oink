@@ -4,91 +4,90 @@
 
 === Description
 
-Log parser to identify actions which significantly increase VM heap size
+Rails plugin and log parser to help narrow down the source(s) of increased memory usage in rails applications.
 
 === Synopsis
 
-Oink works by parsing rails logs to identify actions which significantly increase VM heap size.
+Oink adds memory and active record instantiation information to rails log during runtime and provides an executable to help digest the enhanced logs.
 
-Oink produces output which tells you:
+Given a minimum threshold and a metric (memory or active record instantiation), the oink executable reports:
 
-1. The top ten single requests which exceeded a given memory threshold, ordered by the request which exceed the threshold the most
-2. The number of times each action exceeded a given memory threshold, ordered by the action which exceeded the threshold the most
+1. The top ten single requests which exceeded the threshold for the metric, ordered by the request which exceeded the threshold the most
+2. The number of times each action exceeded the threshold for the metric, ordered by the action which exceeded the threshold the most
 3. (in verbose mode) The log lines produced by requests which exceeded the threshold
+
+Many thanks to Ben Johnson for Memory Usage Logger (http://github.com/binarylogic/memory_usage_logger/tree/master) which is the basis of this plugin.
 
 == Dependencies
 
-Currently oink can only parse logs in the Hodel3000Logger format, which has been amended via a the memory usage logger to add memory usage information.
+Currently oink can only parse logs in the Hodel3000Logger format
 
 - http://github.com/topfunky/hodel_3000_compliant_logger/tree/master
-- http://github.com/binarylogic/memory_usage_logger/tree/master
 
 === Install
 
-To install the latest release (once there is a release):
+To print memory usage at the end of each request, include MemoryUsageLogger in your controller
 
-    $ sudo gem install oink
-    
-For now, just pull down the code from the GitHub repo:
-    
-    $ git clone git://github.com/noahd1/oink.git
-    $ cd oink
-    $ rake gem
-    $ rake install_gem
+  class ApplicationController
+    include MemoryUsageLogger
+  end
+
+To print active record instantiation at the end of each request, include ActiveRecordCounter in your controller
+
+  class ApplicationController
+    include ActiveRecordCounter
+  end
 
 == Usage
 
+After installing the plugin and aggregating some enhanced logs, run the oink executable against the logs. Oink can point at a log file or a directory of log files
+
   Usage: oink [options] files
-    -v, --[no-]verbose               Run verbosely
-    -t, --threshold [INTEGER]        Threshold in MB
-    -f, --file filepath              Output to file
+      -t, --threshold [INTEGER]        Memory threshold in MB
+      -f, --file filepath              Output to file
+          --format FORMAT              Select format
+                                         (ss,v,s,verbose,short-summary,summary)
+      -m, --memory                     Check for Memory Threshold (default)
+      -r, --active-record              Check for Active Record Threshold
+
+Oink hunts for requests which exceed a given threshold. In "memory" mode (the default), the threshold represents a megabyte memory increase from the previous request. In "active record" mode (turned on by passing the --active-record switch), the threshold represents the number of active record objects instantiated during a request.
 
 e.g. To find all actions which increase the heap size more than 75 MB, where log files are location in /tmp/logs/
 
   $ oink --threshold=75 /tmp/logs/*
-  
-  Actions using over 75 MB in single request:
+  ---- MEMORY THRESHOLD ----
+  THRESHOLD: 75 MB
+
   -- SUMMARY --
-  Rank of Single Time Worst Offenders
-  1. Feb 02 16:26:06, 157524 KB, FriendsController#show
-  2. Feb 08 21:35:46, 138640 KB, LanguagesController#show
-  3. Feb 08 20:04:36, 135524 KB, GroupsController#index
-  4. Feb 02 20:11:54, 134972 KB, DashboardsController#show
-  5. Feb 02 19:06:13, 131912 KB, DashboardsController#show
-  6. Feb 02 08:07:46, 115448 KB, GroupsController#show
-  7. Feb 02 12:19:53, 112924 KB, GroupsController#show
-  8. Feb 02 13:03:00, 112064 KB, ColorSchemesController#show
-  9. Feb 02 13:01:59, 109148 KB, SessionsController#create
-  10. Feb 02 06:11:17, 108456 KB, LanguagesController#join
-  # of Times, Action
-  16, DashboardsController#show
-  11, LanguagesController#show
-  11, GroupsController#show
-  10, UsersController#show
-  7, MediaController#show
-  3, SignupsController#create
-  3, FriendsController#show
-  2, ColorSchemesController#show
-  2, UsersController#index
-  2, CalendarController#list
-  2, SearchController#groups
-  2, MediaController#index
-  2, GroupInvitesController#by_email
-  1, PhotoVotesController#create
-  1, CommentsController#create
-  1, FriendshipsController#index
-  1, SearchController#all
-  1, LinkedGroupsController#index
-  1, PostsController#show
+  Worst Requests:
+  1. Feb 02 16:26:06, 157524 KB, SportsController#show
+  2. Feb 02 20:11:54, 134972 KB, DashboardsController#show
+  3. Feb 02 19:06:13, 131912 KB, DashboardsController#show
+  4. Feb 02 08:07:46, 115448 KB, GroupsController#show
+  5. Feb 02 12:19:53, 112924 KB, GroupsController#show
+  6. Feb 02 13:03:00, 112064 KB, ColorSchemesController#show
+  7. Feb 02 13:01:59, 109148 KB, SessionsController#create
+  8. Feb 02 06:11:17, 108456 KB, PublicPagesController#join
+  9. Feb 02 08:43:06, 94468 KB, CommentsController#create
+  10. Feb 02 20:49:44, 82340 KB, DashboardsController#show
+
+  Worst Actions:
+  10, DashboardsController#show
+  9, GroupsController#show
+  5, PublicPagesController#show
+  5, UsersController#show
+  3, MediaController#show
+  2, SportsController#show
   1, SessionsController#create
-  1, AlbumsController#show
-  1, PetitionSignaturesController#create
+  1, GroupInvitesController#by_email
+  1, MediaController#index
+  1, PostsController#show
+  1, PhotoVotesController#create
   1, AlbumsController#index
   1, SignupsController#new
-  1, GroupsController#index
-  1, LanguagesController#join
-  1, DiscussionsController#index
-
+  1, ColorSchemesController#show
+  1, PublicPagesController#join
+  1, CommentsController#create
 
 e.g. In verbose mode, oink will print out all the log information from your logs about the actions which exceeded the threshold specified
 
