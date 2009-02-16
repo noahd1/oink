@@ -1,7 +1,7 @@
 require "date"
 require "oink/oink"
-require "oink/logged_request/logged_memory_request"
-require "oink/priority_queue/priority_queue"
+require "oink/oinked_request/oinked_memory_request"
+require "oink/priority_queue"
 
 class OinkForMemory < Oink
 
@@ -43,7 +43,7 @@ class OinkForMemory < Oink
               @bad_actions[@pids[pid][:action]] ||= 0
               @bad_actions[@pids[pid][:action]] = @bad_actions[@pids[pid][:action]] + 1
               date = /^(\w+ \d{2} \d{2}:\d{2}:\d{2})/.match(line).captures[0]
-              @bad_requests.push(LoggedMemoryRequest.new(@pids[pid][:action], date, @pids[pid][:buffer], memory_diff))
+              @bad_requests.push(OinkedMemoryRequest.new(@pids[pid][:action], date, @pids[pid][:buffer], memory_diff))
               if @format == :verbose
                 @pids[pid][:buffer].each { |b| output.puts b } 
                 output.puts "---------------------------------------------------------------------"
@@ -59,19 +59,7 @@ class OinkForMemory < Oink
       end # end each_line
     end # end each input
 
-    output.puts "\n-- SUMMARY --\n"
-    output.puts "Worst Requests:"
-    @bad_requests.each_with_index do |offender, index|
-      output.puts "#{index + 1}. #{offender.datetime}, #{offender.memory} KB, #{offender.action}"
-      if @format == :summary
-        offender.log_lines.each { |b| output.puts b } 
-        output.puts "---------------------------------------------------------------------"
-      end
-    end
-    output.puts "\nWorst Actions:"
-    @bad_actions.sort{|a,b| b[1]<=>a[1]}.each { |elem|
-      output.puts "#{elem[1]}, #{elem[0]}"
-    }
+    print_summary(output)
     
   end
 
