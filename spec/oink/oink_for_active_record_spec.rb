@@ -12,10 +12,8 @@ describe OinkForActiveRecord do
       STR
   
       io = StringIO.new(str)
-      output = []
-      OinkForActiveRecord.new(io, 50).each_line do |line|
-        output << line
-      end
+      output = PsuedoOutput.new
+      OinkForActiveRecord.new(io, 50).print(output)
       output.should include("1, Users#show")
     end
     
@@ -27,10 +25,8 @@ describe OinkForActiveRecord do
       STR
 
       io = StringIO.new(str)
-      output = []
-      OinkForActiveRecord.new(io, 50).each_line do |line|
-        output << line
-      end
+      output = PsuedoOutput.new
+      OinkForActiveRecord.new(io, 50).print(output)
       output.should_not include("1, Users#show")
     end
 
@@ -45,10 +41,8 @@ describe OinkForActiveRecord do
       STR
   
       io = StringIO.new(str)
-      output = []
-      OinkForActiveRecord.new(io, 50).each_line do |line|
-        output << line
-      end
+      output = PsuedoOutput.new
+      OinkForActiveRecord.new(io, 50).print(output)
       output.should include("2, Users#show")
     end
 
@@ -66,10 +60,8 @@ describe OinkForActiveRecord do
       STR
 
       io = StringIO.new(str)
-      output = []
-      OinkForActiveRecord.new(io, 50).each_line do |line|
-        output << line
-      end
+      output = PsuedoOutput.new
+      OinkForActiveRecord.new(io, 50).print(output)
       output[-2].should == "2, Media#show"
       output[-1].should == "1, Users#show"
     end
@@ -86,10 +78,8 @@ describe OinkForActiveRecord do
       STR
   
       io = StringIO.new(str)
-      output = []
-      OinkForActiveRecord.new(io, 50).each_line do |line|
-        output << line
-      end
+      output = PsuedoOutput.new
+      OinkForActiveRecord.new(io, 50).print(output)
       output.should include("1, Users#show")
     end    
     
@@ -105,10 +95,8 @@ describe OinkForActiveRecord do
       STR
     
       io = StringIO.new(str)
-      output = []
-      OinkForActiveRecord.new(io, 50).each_line do |line|
-        output << line
-      end
+      output = PsuedoOutput.new
+      OinkForActiveRecord.new(io, 50).print(output)
       output.should include("1. Feb 01 01:58:31, 51, Users#show")
     end
     
@@ -120,10 +108,8 @@ describe OinkForActiveRecord do
       STR
       
       io = StringIO.new(str)
-      output = []
-      OinkForActiveRecord.new(io, 50).each_line do |line|
-        output << line
-      end
+      output = PsuedoOutput.new
+      OinkForActiveRecord.new(io, 50).print(output)
       output.should_not include("1. Feb 01 01:58:31, 50, Users#show")
     end
     
@@ -138,10 +124,8 @@ describe OinkForActiveRecord do
       STR
       
       io = StringIO.new(str)
-      output = []
-      OinkForActiveRecord.new(io, 50).each_line do |line|
-        output << line
-      end
+      output = PsuedoOutput.new
+      OinkForActiveRecord.new(io, 50).print(output)
       output[4].should == "1. Feb 01 01:58:34, 100, MediaController#show"
       output[5].should == "2. Feb 01 01:58:31, 75, DetailsController#show"
     end
@@ -156,10 +140,8 @@ describe OinkForActiveRecord do
       Feb 01 01:58:34 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
       STR
       io = StringIO.new(str)
-      output = []
-      OinkForActiveRecord.new(io, 50, :format => :verbose).each_line do |line|
-        output << line
-      end
+      output = PsuedoOutput.new
+      OinkForActiveRecord.new(io, 50, :format => :verbose).print(output)
       output[3..5].should == str.split("\n")[0..2].map { |o| o.strip }
     end
     
@@ -175,10 +157,8 @@ describe OinkForActiveRecord do
       STR
       
       io = StringIO.new(str)
-      output = []
-      OinkForActiveRecord.new(io, 50, :format => :verbose).each_line do |line|
-        output << line
-      end
+      output = PsuedoOutput.new
+      OinkForActiveRecord.new(io, 50, :format => :verbose).print(output)
       output[3..5].should == str.split("\n")[4..6].map { |o| o.strip }
     end
   end
@@ -200,10 +180,8 @@ describe OinkForActiveRecord do
 
       io1 = StringIO.new(str1)
       io2 = StringIO.new(str2)
-      output = []
-      OinkForActiveRecord.new([io1, io2], 50).each_line do |line|
-        output << line
-      end
+      output = PsuedoOutput.new
+      OinkForActiveRecord.new([io1, io2], 50).print(output)
       output.should include("2, MediaController#show")
     end
 

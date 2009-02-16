@@ -1,27 +1,15 @@
 require "date"
+require "oink/oink"
 require "oink/logged_request/logged_memory_request"
 require "oink/priority_queue/priority_queue"
 
-class OinkForMemory
-  VERSION = '0.1.0'
-  FORMATS = %w[verbose short-summary summary]
-  FORMAT_ALIASES = { "v" => "verbose", "ss" => "short-summary", "s" => "summary" }
-  
-  def initialize(input, threshold, options = {})
-    @inputs = Array(input)
-    @threshold = threshold
-    @format = options[:format] || :short_summary
+class OinkForMemory < Oink
+
+  def print(output)
+    output.puts "---- MEMORY THRESHOLD ----"
+    output.puts "THRESHOLD: #{@threshold/1024} MB\n"
     
-    @pids = {}
-    @bad_actions = {}
-    @bad_requests = PriorityQueue.new(10)
-  end
-  
-  def each_line
-    yield "---- MEMORY THRESHOLD ----"
-    yield "THRESHOLD: #{@threshold/1024} MB\n"
-    
-    yield "\n-- REQUESTS --\n" if @format == :verbose
+    output.puts "\n-- REQUESTS --\n" if @format == :verbose
     
     @inputs.each do |input|
       input.each_line do |line|
@@ -57,8 +45,8 @@ class OinkForMemory
               date = /^(\w+ \d{2} \d{2}:\d{2}:\d{2})/.match(line).captures[0]
               @bad_requests.push(LoggedMemoryRequest.new(@pids[pid][:action], date, @pids[pid][:buffer], memory_diff))
               if @format == :verbose
-                @pids[pid][:buffer].each { |b| yield b } 
-                yield "---------------------------------------------------------------------"
+                @pids[pid][:buffer].each { |b| output.puts b } 
+                output.puts "---------------------------------------------------------------------"
               end
             end
           end
@@ -71,18 +59,18 @@ class OinkForMemory
       end # end each_line
     end # end each input
 
-    yield "\n-- SUMMARY --\n"
-    yield "Worst Requests:"
+    output.puts "\n-- SUMMARY --\n"
+    output.puts "Worst Requests:"
     @bad_requests.each_with_index do |offender, index|
-      yield "#{index + 1}. #{offender.datetime}, #{offender.memory} KB, #{offender.action}"
+      output.puts "#{index + 1}. #{offender.datetime}, #{offender.memory} KB, #{offender.action}"
       if @format == :summary
-        offender.log_lines.each { |b| yield b } 
-        yield "---------------------------------------------------------------------"
+        offender.log_lines.each { |b| output.puts b } 
+        output.puts "---------------------------------------------------------------------"
       end
     end
-    yield "\nWorst Actions:"
+    output.puts "\nWorst Actions:"
     @bad_actions.sort{|a,b| b[1]<=>a[1]}.each { |elem|
-      yield "#{elem[1]}, #{elem[0]}"
+      output.puts "#{elem[1]}, #{elem[0]}"
     }
     
   end

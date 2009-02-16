@@ -61,17 +61,13 @@ if options[:type] == :memory
   options[:threshold] ||= 75
   options[:threshold] *= 1024
 
-  OinkForMemory.new(handles, options[:threshold], :format => options[:format]).each_line do |line|
-    output.puts line
-  end
+  OinkForMemory.new(handles, options[:threshold], :format => options[:format]).print(output)
 
 elsif options[:type] == :active_record
   
   options[:threshold] ||= 500
   
-  OinkForActiveRecord.new(handles, options[:threshold], :format => options[:format]).each_line do |line|
-    output.puts line
-  end
+  OinkForActiveRecord.new(handles, options[:threshold], :format => options[:format]).print(output)
     
 end
 
