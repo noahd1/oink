@@ -16,11 +16,6 @@ module ActiveRecordCounter
     end
 end
 
-module OinkActiveRecordClassMethods
-
-
-end
-
 module OinkActiveRecordInstanceMethods
   
   def self.included(klass)
