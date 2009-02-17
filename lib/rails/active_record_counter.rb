@@ -1,6 +1,7 @@
 module ActiveRecordCounter
   def self.included(klass)
-    ActiveRecord::Base.send(:include, OinkActiveRecordExtensions)
+    ActiveRecord::Base.send(:extend, OinkActiveRecordClassMethods)
+    ActiveRecord::Base.send(:extend, OinkActiceRecordInstanceMethods)
     
     klass.class_eval do
       after_filter :report_active_record_count
@@ -16,19 +17,23 @@ module ActiveRecordCounter
     end
 end
 
-module OinkActiveRecordExtensions
+module OinkActiveRecordClassMethods
   
-  def self.reset_ar_count
+  def reset_ar_count
     @@instantiated_ar_count = 0
   end
 
-  def self.instantiated_ar_count
+  def instantiated_ar_count
     @@instantiated_ar_count ||= 0
   end
 
+end
+
+module OinkActiceRecordInstanceMethods
+  
   def after_initialize
     @@instantiated_ar_count ||= 0
     @@instantiated_ar_count = @@instantiated_ar_count + 1
   end
-
+  
 end
