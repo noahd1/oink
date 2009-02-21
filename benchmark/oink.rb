@@ -2,8 +2,7 @@
 
 require 'benchmark'
 
-$:.unshift(File.dirname(__FILE__ + '.rb') + '/../lib') unless $:.include?(File.dirname(__FILE__ + '.rb') + '/../lib')
-require "oink"
+require File.dirname(__FILE__) + "/../lib/oink.rb"
 
 Benchmark.bmbm(15) do |x|
   x.report("Running Oink") { 
