@@ -21,8 +21,8 @@ class Cli
         options[:output_file] = filename
       end
 
-      format_list = (OinkForMemory::FORMAT_ALIASES.keys + OinkForMemory::FORMATS).join(',')
-      opts.on("--format FORMAT", OinkForMemory::FORMATS, OinkForMemory::FORMAT_ALIASES, "Select format",
+      format_list = (Oink::MemoryUsageReporter::FORMAT_ALIASES.keys + Oink::MemoryUsageReporter::FORMATS).join(',')
+      opts.on("--format FORMAT", Oink::MemoryUsageReporter::FORMATS, Oink::MemoryUsageReporter::FORMAT_ALIASES, "Select format",
               "  (#{format_list})") do |format|
         options[:format] = format.to_sym
       end
@@ -61,13 +61,13 @@ class Cli
       options[:threshold] ||= 75
       options[:threshold] *= 1024
 
-      OinkForMemory.new(handles, options[:threshold], :format => options[:format]).print(output)
+      Oink::MemoryUsageReporter.new(handles, options[:threshold], :format => options[:format]).print(output)
 
     elsif options[:type] == :active_record
 
       options[:threshold] ||= 500
 
-      OinkForActiveRecord.new(handles, options[:threshold], :format => options[:format]).print(output)
+      Oink::ActiveRecordInstantiationReporter.new(handles, options[:threshold], :format => options[:format]).print(output)
 
     end
 

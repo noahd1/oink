@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
 
-describe OinkForActiveRecord do
+describe Oink::ActiveRecordInstantiationReporter do
 
   describe "short summary with frequent offenders" do
   
@@ -13,7 +13,7 @@ describe OinkForActiveRecord do
   
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForActiveRecord.new(io, 50).print(output)
+      Oink::ActiveRecordInstantiationReporter.new(io, 50).print(output)
       output.should include("1, Users#show")
     end
     
@@ -26,7 +26,7 @@ describe OinkForActiveRecord do
 
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForActiveRecord.new(io, 50).print(output)
+      Oink::ActiveRecordInstantiationReporter.new(io, 50).print(output)
       output.should_not include("1, Users#show")
     end
 
@@ -42,7 +42,7 @@ describe OinkForActiveRecord do
   
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForActiveRecord.new(io, 50).print(output)
+      Oink::ActiveRecordInstantiationReporter.new(io, 50).print(output)
       output.should include("2, Users#show")
     end
 
@@ -61,7 +61,7 @@ describe OinkForActiveRecord do
 
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForActiveRecord.new(io, 50).print(output)
+      Oink::ActiveRecordInstantiationReporter.new(io, 50).print(output)
       output[-2].should == "2, Media#show"
       output[-1].should == "1, Users#show"
     end
@@ -79,7 +79,7 @@ describe OinkForActiveRecord do
   
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForActiveRecord.new(io, 50).print(output)
+      Oink::ActiveRecordInstantiationReporter.new(io, 50).print(output)
       output.should include("1, Users#show")
     end    
     
@@ -96,7 +96,7 @@ describe OinkForActiveRecord do
     
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForActiveRecord.new(io, 50).print(output)
+      Oink::ActiveRecordInstantiationReporter.new(io, 50).print(output)
       output.should include("1. Feb 01 01:58:31, 51, Users#show")
     end
     
@@ -109,7 +109,7 @@ describe OinkForActiveRecord do
       
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForActiveRecord.new(io, 50).print(output)
+      Oink::ActiveRecordInstantiationReporter.new(io, 50).print(output)
       output.should_not include("1. Feb 01 01:58:31, 50, Users#show")
     end
     
@@ -125,7 +125,7 @@ describe OinkForActiveRecord do
       
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForActiveRecord.new(io, 50).print(output)
+      Oink::ActiveRecordInstantiationReporter.new(io, 50).print(output)
       output[4].should == "1. Feb 01 01:58:34, 100, MediaController#show"
       output[5].should == "2. Feb 01 01:58:31, 75, DetailsController#show"
     end
@@ -141,7 +141,7 @@ describe OinkForActiveRecord do
       STR
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForActiveRecord.new(io, 50, :format => :verbose).print(output)
+      Oink::ActiveRecordInstantiationReporter.new(io, 50, :format => :verbose).print(output)
       output[3..5].should == str.split("\n")[0..2].map { |o| o.strip }
     end
     
@@ -158,7 +158,7 @@ describe OinkForActiveRecord do
       
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForActiveRecord.new(io, 50, :format => :verbose).print(output)
+      Oink::ActiveRecordInstantiationReporter.new(io, 50, :format => :verbose).print(output)
       output[3..5].should == str.split("\n")[4..6].map { |o| o.strip }
     end
   end
@@ -181,7 +181,7 @@ describe OinkForActiveRecord do
       io1 = StringIO.new(str1)
       io2 = StringIO.new(str2)
       output = PsuedoOutput.new
-      OinkForActiveRecord.new([io1, io2], 50).print(output)
+      Oink::ActiveRecordInstantiationReporter.new([io1, io2], 50).print(output)
       output.should include("2, MediaController#show")
     end
 

@@ -2,11 +2,11 @@ require 'rubygems'
 require "rake/gempackagetask"
 require "rake/clean"
 require "spec/rake/spectask"
-require './lib/oink/oink.rb'
+require './lib/oink/base.rb'
 
 spec = Gem::Specification.new do |s|
   s.name         = "oink"
-  s.version      = Oink::VERSION
+  s.version      = Oink::Base::VERSION
   s.author       = "Noah Davis"
   s.email        = "noahd1" + "@" + "yahoo.com"
   s.homepage     = "http://github.com/noahd1/oink"

@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
 
-describe OinkForMemory do
-
+describe Oink::MemoryUsageReporter do
+  
   TEN_MEGS = 10 * 1024
 
   describe "short summary with frequent offenders" do
@@ -18,7 +18,7 @@ describe OinkForMemory do
   
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForMemory.new(io, TEN_MEGS).print(output)
+      Oink::MemoryUsageReporter.new(io, TEN_MEGS).print(output)
       output.should include("1, MediaController#show")
     end
     
@@ -36,7 +36,7 @@ describe OinkForMemory do
   
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForMemory.new(io, TEN_MEGS).print(output)
+      Oink::MemoryUsageReporter.new(io, TEN_MEGS).print(output)
       output.should_not include("1, MediaController#show")
     end
     
@@ -55,7 +55,7 @@ describe OinkForMemory do
   
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForMemory.new(io, TEN_MEGS).print(output)
+      Oink::MemoryUsageReporter.new(io, TEN_MEGS).print(output)
       output.should include("2, MediaController#show")
     end
     
@@ -77,7 +77,7 @@ describe OinkForMemory do
   
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForMemory.new(io, TEN_MEGS).print(output)
+      Oink::MemoryUsageReporter.new(io, TEN_MEGS).print(output)
       output[-2].should == "2, MediaController#show"
       output[-1].should == "1, Users#show"
     end
@@ -96,7 +96,7 @@ describe OinkForMemory do
   
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForMemory.new(io, TEN_MEGS).print(output)
+      Oink::MemoryUsageReporter.new(io, TEN_MEGS).print(output)
       output.should_not include("1, MediaController#show")
     end
     
@@ -112,7 +112,7 @@ describe OinkForMemory do
   
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForMemory.new(io, TEN_MEGS).print(output)
+      Oink::MemoryUsageReporter.new(io, TEN_MEGS).print(output)
       output.should_not include("1, MediaController#show")
     end
     
@@ -130,7 +130,7 @@ describe OinkForMemory do
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        OinkForMemory.new(io, TEN_MEGS).print(output)
+        Oink::MemoryUsageReporter.new(io, TEN_MEGS).print(output)
         output.should include("1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show")
       end
       
@@ -146,7 +146,7 @@ describe OinkForMemory do
         
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        OinkForMemory.new(io, TEN_MEGS).print(output)
+        Oink::MemoryUsageReporter.new(io, TEN_MEGS).print(output)
         output.should_not include("1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show")
       end
       
@@ -165,7 +165,7 @@ describe OinkForMemory do
         
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        OinkForMemory.new(io, TEN_MEGS).print(output)
+        Oink::MemoryUsageReporter.new(io, TEN_MEGS).print(output)
         output[4].should == "1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show"
         output[5].should == "2. Feb 01 01:58:37, #{TEN_MEGS + 1} KB, DetailsController#show"
       end
@@ -184,7 +184,7 @@ describe OinkForMemory do
     #   
     #   io = StringIO.new(str)
     #   output = PsuedoOutput.new
-    #   OinkForMemory.new(io, TEN_MEGS).each_line do |line|
+    #   Oink::MemoryUsageReporter.new(io, TEN_MEGS).each_line do |line|
     #     output << line
     #   end
     #   output.first.should == "Feb 01 01:58:29 - Mar 13 03:58:30"
@@ -206,7 +206,7 @@ describe OinkForMemory do
       STR
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForMemory.new(io, TEN_MEGS, :format => :verbose).print(output)
+      Oink::MemoryUsageReporter.new(io, TEN_MEGS, :format => :verbose).print(output)
       output[3..6].should == str.split("\n")[4..7].map { |o| o.strip }
     end
     
@@ -227,7 +227,7 @@ describe OinkForMemory do
   
       io = StringIO.new(str)
       output = PsuedoOutput.new
-      OinkForMemory.new(io, TEN_MEGS, :format => :verbose).print(output)
+      Oink::MemoryUsageReporter.new(io, TEN_MEGS, :format => :verbose).print(output)
       output[3..5].should == str.split("\n")[6..8].map { |o| o.strip }
     end
   end
@@ -256,7 +256,7 @@ describe OinkForMemory do
       io1 = StringIO.new(str1)
       io2 = StringIO.new(str2)
       output = PsuedoOutput.new
-      OinkForMemory.new([io1, io2], TEN_MEGS).print(output)
+      Oink::MemoryUsageReporter.new([io1, io2], TEN_MEGS).print(output)
       output.should include("2, MediaController#show")
     end
 
