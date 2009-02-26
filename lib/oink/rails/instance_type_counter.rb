@@ -41,14 +41,13 @@ module Oink
         end
       
         def self.instantiated_hash
-          @@instantiated_hash || {}
+          @@instantiated_hash
         end
       
       end
     end
   
     def _instance_counter_after_initialize
-      @@instantiated_hash ||= {}
       @@instantiated_hash[self.class.base_class.name] ||= 0
       @@instantiated_hash[self.class.base_class.name] = @@instantiated_hash[self.class.base_class.name] + 1    
     end
