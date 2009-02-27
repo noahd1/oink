@@ -8,12 +8,17 @@ module Oink
       end
     end
 
-    private
+    def before_report_active_record_count(instantiation_data)
+    end
 
+    private
+    
       def report_instance_type_count
+        report_hash = ActiveRecord::Base.instantiated_hash.merge("Total" => ActiveRecord::Base.total_objects_instantiated)
+        before_report_active_record_count(report_hash)
         if logger
           logger.info("Instantiated #{ActiveRecord::Base.total_objects_instantiated} ActiveRecord objects")
-          breakdown = ActiveRecord::Base.instantiated_hash.sort{|a,b| b[1]<=>a[1]}.collect {|k,v| "#{k}: #{v}" }.join(" | ")
+          breakdown = report_hash.sort{|a,b| b[1]<=>a[1]}.collect {|k,v| "#{k}: #{v}" }.join(" | ")
           logger.info("Instantiation Breakdown: #{breakdown}")
           ActiveRecord::Base.reset_instance_type_count
         end
@@ -28,6 +33,7 @@ module Oink
       klass.class_eval do
       
         @@instantiated = {}
+        @@total = nil
       
         if klass.instance_methods.include?("after_initialize")
           alias_method_chain :after_initialize, :instance_type_count
@@ -46,11 +52,7 @@ module Oink
         end
         
         def self.total_objects_instantiated
-          total = 0
-          @@instantiated.values.each do |value|
-            total += value
-          end
-          total
+          @@total ||= @@instantiated.inject(0) { |i, j| i + j.last }
         end
       
       end
