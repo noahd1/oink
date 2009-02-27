@@ -15,18 +15,6 @@ class PsuedoOutput < Array
   
 end
 
-module Oink
-  module OinkInstanceTypeCounterInstanceMethods    
-    class Rails
-      def self.configuration
-        config = OpenStruct.new
-        config.cache_classes = true
-        config
-      end
-    end
-  end
-end
-
 Spec::Runner.configure do |config|
 
   config.before :suite do

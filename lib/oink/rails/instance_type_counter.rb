@@ -17,7 +17,6 @@ module Oink
         report_hash = ActiveRecord::Base.instantiated_hash.merge("Total" => ActiveRecord::Base.total_objects_instantiated)
         before_report_active_record_count(report_hash)
         if logger
-          logger.info("Instantiated #{ActiveRecord::Base.total_objects_instantiated} ActiveRecord objects")
           breakdown = report_hash.sort{|a,b| b[1]<=>a[1]}.collect {|k,v| "#{k}: #{v}" }.join(" | ")
           logger.info("Instantiation Breakdown: #{breakdown}")
           ActiveRecord::Base.reset_instance_type_count
@@ -29,19 +28,10 @@ module Oink
   module OinkInstanceTypeCounterInstanceMethods
   
     def self.included(klass)
-      raise "Oink does not support cache_classes being false currently" if !Rails.configuration.cache_classes
       klass.class_eval do
       
         @@instantiated = {}
         @@total = nil
-      
-        if klass.instance_methods.include?("after_initialize")
-          alias_method_chain :after_initialize, :instance_type_count
-        else
-          define_method :after_initialize do
-            _instance_counter_after_initialize
-          end
-        end
       
         def self.reset_instance_type_count
           @@instantiated = {}
@@ -58,9 +48,9 @@ module Oink
       end
     end
   
-    def _instance_counter_after_initialize
+    def after_initialize
       @@instantiated[self.class.base_class.name] ||= 0
-      @@instantiated[self.class.base_class.name] = @@instantiated[self.class.base_class.name] + 1    
+      @@instantiated[self.class.base_class.name] = @@instantiated[self.class.base_class.name] + 1  
     end
   
     def after_initialize_with_instance_type_count
