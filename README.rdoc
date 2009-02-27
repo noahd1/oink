@@ -26,17 +26,25 @@ Currently oink can only parse logs in the Hodel3000Logger format
 
 === Install
 
-To print memory usage at the end of each request, include MemoryUsageLogger in your controller
+To print memory usage at the end of each request, include Oink::MemoryUsageLogger in your controller. This will add lines like:
+
+class ApplicationController
+  include Oink::MemoryUsageLogger
+end
+
+which results in lines like this added to each request:
+
+  Feb 08 11:39:54 ey33-s00302 rails[9076]: Memory usage: 316516 | PID: 9076
+
+To print active record instantiation at the end of each request, include Oink::InstanceTypeCounter in your controller. 
 
   class ApplicationController
-    include MemoryUsageLogger
+    include Oink::InstanceTypeCounter
   end
 
-To print active record instantiation at the end of each request, include ActiveRecordCounter in your controller
+which results in lines like this added to each request:
 
-  class ApplicationController
-    include ActiveRecordCounter
-  end
+  Feb 27 13:21:04 ey04-s00295 rails[11862]: Instantiation Breakdown: Total: 73 | User: 34 | Group: 20 | Medium: 20 | Sport: 10 | Post: 4 | Discussion: 2
 
 == Usage
 

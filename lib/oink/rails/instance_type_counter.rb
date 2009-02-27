@@ -35,6 +35,7 @@ module Oink
       
         def self.reset_instance_type_count
           @@instantiated = {}
+          @@total = nil
         end
       
         def self.instantiated_hash

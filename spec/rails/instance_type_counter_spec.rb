@@ -28,8 +28,18 @@ describe Oink::OinkInstanceTypeCounterInstanceMethods do
       Pen.create(:location => "Backyard")
       Pig.first
       ActiveRecord::Base.total_objects_instantiated.should == 3
+    end    
+  end
+  
+  describe "reset" do
+    it "should reset the total count" do
+      Pig.create(:name => "Babe")
+      ActiveRecord::Base.instantiated_hash["Pig"].should == 1
+      ActiveRecord::Base.reset_instance_type_count
+      ActiveRecord::Base.total_objects_instantiated.should == 0
+      Pig.create(:name => "Babe")
+      ActiveRecord::Base.total_objects_instantiated.should == 0
     end
-    
   end
   
 end
