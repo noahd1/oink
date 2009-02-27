@@ -15,12 +15,12 @@ module Oink
     
       def report_instance_type_count
         report_hash = ActiveRecord::Base.instantiated_hash.merge("Total" => ActiveRecord::Base.total_objects_instantiated)
-        before_report_active_record_count(report_hash)
+        breakdown = report_hash.sort{|a,b| b[1]<=>a[1]}.collect {|k,v| "#{k}: #{v}" }.join(" | ")
+        before_report_active_record_count(breakdown)
         if logger
-          breakdown = report_hash.sort{|a,b| b[1]<=>a[1]}.collect {|k,v| "#{k}: #{v}" }.join(" | ")
           logger.info("Instantiation Breakdown: #{breakdown}")
-          ActiveRecord::Base.reset_instance_type_count
         end
+        ActiveRecord::Base.reset_instance_type_count
       end
 
   end

@@ -31,7 +31,7 @@ module Oink
             end
             @pids[pid][:request_finished] = false
       
-          elsif line =~ /Instantiated (\d+) ActiveRecord objects/
+          elsif line =~ /Instantiation Breakdown: Total: (\d+)/
 
             @pids[pid][:ar_count] = $1.to_i
       
