@@ -46,10 +46,23 @@ module Oink
           @@total ||= @@instantiated.inject(0) { |i, j| i + j.last }
         end
       
+        if instance_methods.include?("after_initialize")
+          def after_initialize_with_oink
+            after_initialize_without_oink
+            increment_ar_count
+          end
+
+          alias_method_chain :after_initialize, :oink
+        else
+          def after_initialize
+            increment_ar_count
+          end
+        end
+      
       end
     end
   
-    def after_initialize
+    def increment_ar_count
       @@instantiated[self.class.base_class.name] ||= 0
       @@instantiated[self.class.base_class.name] = @@instantiated[self.class.base_class.name] + 1  
     end
