@@ -53,10 +53,6 @@ module Oink
       @@instantiated[self.class.base_class.name] ||= 0
       @@instantiated[self.class.base_class.name] = @@instantiated[self.class.base_class.name] + 1  
     end
-  
-    def after_initialize_with_instance_type_count
-      after_initialize_without_instance_type_count
-      _instance_counter_after_initialize
-    end
+
   end
 end
