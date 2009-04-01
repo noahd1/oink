@@ -52,7 +52,7 @@ module Oink
             increment_ar_count
           end
 
-          alias_method_chain :after_initialize, :oink
+          alias_method_chain :after_initialize, :oink unless instance_methods.include?(:after_initialize_with_oink)
         else
           def after_initialize
             increment_ar_count
