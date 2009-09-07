@@ -48,7 +48,7 @@ which results in lines like this added to each request:
 
 == Usage
 
-After installing the plugin and aggregating some enhanced logs, run the oink executable against the logs. Oink can point at a log file or a directory of log files
+After installing the plugin and aggregating some enhanced logs, run the oink executable against the logs. This will typically be installed as script/oink. Oink can point at a log file or a directory of log files
 
   Usage: oink [options] files
       -t, --threshold [INTEGER]        Memory threshold in MB
@@ -99,7 +99,7 @@ e.g. To find all actions which increase the heap size more than 75 MB, where log
 
 e.g. In verbose mode, oink will print out all the log information from your logs about the actions which exceeded the threshold specified
 
-  $ oink --verbose --threshold=75 /tmp/logs/*
+  $ oink --format verbose --threshold=75 /tmp/logs/*
 
   ---------------------------------------------------------------------
   Feb 08 11:39:52 ey33-s00302 rails[9076]: Processing UsersController#show (for 11.187.34.45 at 2009-02-08 11:39:52) [GET]
