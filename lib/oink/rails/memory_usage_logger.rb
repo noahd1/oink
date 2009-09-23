@@ -14,14 +14,13 @@ module Oink
     private
       def get_memory_usage
         if defined? WIN32OLE
-          wmi = WIN32OLE.connect("winmgmts://./root/cimv2")
+          wmi = WIN32OLE.connect("winmgmts:root/cimv2")
           mem = 0
-          wmi.InstancesOf("Win32_Process").each do |wproc|
-            next unless wproc.ProcessId == $$
-            mem = wproc.WorkingSetSize.to_i
-            break
+          query = "select * from Win32_Process where ProcessID = #{$$}"
+          wmi.ExecQuery(query).each do |wproc|
+            mem = wproc.WorkingSetSize
           end
-          mem
+          mem.to_i
         else
           `ps -o rss= -p #{$$}`.to_i
         end
