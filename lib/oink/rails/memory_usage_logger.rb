@@ -20,7 +20,7 @@ module Oink
           wmi.ExecQuery(query).each do |wproc|
             mem = wproc.WorkingSetSize
           end
-          mem.to_i
+          mem.to_i / 1000
         else
           `ps -o rss= -p #{$$}`.to_i
         end
