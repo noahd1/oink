@@ -16,6 +16,9 @@ module Oink
       @inputs.each do |input|
         input.each_line do |line|
           line = line.strip
+          
+           # Skip this line since we're only interested in the Hodel 3000 compliant lines
+          next unless line =~ HODEL_LOG_FORMAT_REGEX
 
           if line =~ /rails\[(\d+)\]/
             pid = $1
@@ -40,7 +43,7 @@ module Oink
             if @pids[pid][:ar_count] > @threshold
               @bad_actions[@pids[pid][:action]] ||= 0
               @bad_actions[@pids[pid][:action]] = @bad_actions[@pids[pid][:action]] + 1
-              date = /^(\w+ \d{2} \d{2}:\d{2}:\d{2})/.match(line).captures[0]
+              date = HODEL_LOG_FORMAT_REGEX.match(line).captures[0]
               @bad_requests.push(OinkedARRequest.new(@pids[pid][:action], date, @pids[pid][:buffer], @pids[pid][:ar_count]))
               if @format == :verbose
                 @pids[pid][:buffer].each { |b| output.puts b } 
