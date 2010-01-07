@@ -6,6 +6,7 @@ require "oink/priority_queue"
 module Oink
 
   class MemoryUsageReporter < Base
+    HODEL_LOG_FORMAT_REGEX = /^(\w+ \d{2} \d{2}:\d{2}:\d{2})/
 
     def print(output)
       output.puts "---- MEMORY THRESHOLD ----"
@@ -15,6 +16,9 @@ module Oink
     
       @inputs.each do |input|
         input.each_line do |line|
+           # Skip this line since we're only interested in the Hodel 3000 compliant lines
+          next unless line =~ HODEL_LOG_FORMAT_REGEX
+          
           line = line.strip
 
           if line =~ /rails\[(\d+)\]/
@@ -44,7 +48,7 @@ module Oink
               if memory_diff > @threshold
                 @bad_actions[@pids[pid][:action]] ||= 0
                 @bad_actions[@pids[pid][:action]] = @bad_actions[@pids[pid][:action]] + 1
-                date = /^(\w+ \d{2} \d{2}:\d{2}:\d{2})/.match(line).captures[0]
+                date = HODEL_LOG_FORMAT_REGEX.match(line).captures[0]
                 @bad_requests.push(OinkedMemoryRequest.new(@pids[pid][:action], date, @pids[pid][:buffer], memory_diff))
                 if @format == :verbose
                   @pids[pid][:buffer].each { |b| output.puts b } 
