@@ -56,7 +56,7 @@ module Oink
         end
 
         def self.total_objects_instantiated
-          @@total ||= @@instantiated.inject(0) { |i, j| i + j.last }
+          @@total ||= @@instantiated.values.sum
         end
 
         unless Oink.extended_active_record?

@@ -1,7 +1,8 @@
 class OinkedRequest
-  
+  include Comparable
+
   attr_accessor :action, :datetime, :log_lines, :oink_number
-  
+
   def initialize(action, datetime, log_lines, oink_number)
     @action = action
     @datetime = datetime
@@ -12,9 +13,4 @@ class OinkedRequest
   def <=>(other)
     self.oink_number <=> other.oink_number
   end
-  
-  def >(other)
-    self.oink_number > other.oink_number
-  end  
-  
 end

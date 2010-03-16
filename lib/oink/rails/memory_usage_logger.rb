@@ -21,8 +21,12 @@ module Oink
             mem = wproc.WorkingSetSize
           end
           mem.to_i / 1000
+        elsif proc_file = File.new("/proc/#{$$}/smaps") rescue nil
+          proc_file.map do |line|
+            size = line[/Size: *(\d+)/, 1] and size.to_i
+          end.compact.sum
         else
-          `ps -o rss= -p #{$$}`.to_i
+          `ps -o vsz= -p #{$$}`.to_i
         end
       end
 

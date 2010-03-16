@@ -41,5 +41,5 @@ describe Oink::OinkInstanceTypeCounterInstanceMethods do
       ActiveRecord::Base.total_objects_instantiated.should == 0
     end
   end
-  
+
 end
