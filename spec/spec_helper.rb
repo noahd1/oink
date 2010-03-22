@@ -5,6 +5,7 @@ require 'ostruct'
 dir = File.dirname(__FILE__)
 require File.join(dir, "/../lib/oink.rb")
 require "oink/rails/instance_type_counter"
+require "oink/rails/memory_usage_logger"
 require File.join(dir, '../config/environment')
 
 class PsuedoOutput < Array

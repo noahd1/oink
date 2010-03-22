@@ -1,12 +1,4 @@
-require "rubygems"
-require "mocha"
-require "active_support"
-
-dir = File.dirname(__FILE__)
-require File.join(dir, "/../../lib/oink.rb")
-require "oink/rails/memory_usage_logger"
 require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
-
 
 class ApplicationController
   attr_accessor :backtick
@@ -64,14 +56,14 @@ describe Oink::MemoryUsageLogger do
 
             STR
 
-        File.stubs(:new).returns(proc_file).with { |filename| filename == "/proc/#{$$}/smaps" or raise ScriptError, "Bad filename '#{filename}'" }
+        File.should_receive(:new).with("/proc/#{$$}/smaps").and_return(proc_file)
         controller = ApplicationController.new
         controller.index
         [[:info, "Memory usage: 42 | PID: #{$$}"]].should == controller.logger.log
       end
 
       it "should work on non-linux" do
-        File.stubs(:new).raises(Errno::ENOENT, "No such file or directory")
+        File.stub!(:new).and_raise(Errno::ENOENT.new("No such file or directory"))
         controller = ApplicationController.new
         controller.index
         [["ps -o vsz= -p #{$$}"]].should == controller.backtick
