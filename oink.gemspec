@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
      "lib/oink/oinked_request/oinked_memory_request.rb",
      "lib/oink/oinked_request/oinked_request.rb",
      "lib/oink/priority_queue.rb",
+     "lib/oink/rails.rb",
      "lib/oink/rails/instance_type_counter.rb",
      "lib/oink/rails/memory_usage_logger.rb"
   ]
