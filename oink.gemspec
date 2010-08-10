@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Noah Davis"]
-  s.date = %q{2010-07-06}
+  s.date = %q{2010-08-10}
   s.default_executable = %q{oink}
   s.description = %q{Log parser to identify actions which significantly increase VM heap size}
   s.email = %q{noahd1@yahoo.com}
@@ -56,12 +56,9 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
     else
-      s.add_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
     end
   else
-    s.add_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
   end
 end
 
