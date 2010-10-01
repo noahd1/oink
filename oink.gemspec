@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Noah Davis"]
-  s.date = %q{2010-08-10}
+  s.date = %q{2010-09-30}
   s.default_executable = %q{oink}
   s.description = %q{Log parser to identify actions which significantly increase VM heap size}
   s.email = %q{noahd1@yahoo.com}
@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/noahd1/oink}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.6}
+  s.rubygems_version = %q{1.3.7}
   s.summary = %q{Log parser to identify actions which significantly increase VM heap size}
   s.test_files = [
     "spec/oink/active_record_instantiation_reporter_spec.rb",
@@ -55,10 +55,13 @@ Gem::Specification.new do |s|
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
     else
+      s.add_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
     end
   else
+    s.add_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
   end
 end
 
