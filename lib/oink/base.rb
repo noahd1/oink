@@ -2,7 +2,7 @@ module Oink
 
   class Base
 
-    VERSION = '0.1.0'
+    VERSION = '0.1.1'
     FORMATS = %w[verbose short-summary summary]
     FORMAT_ALIASES = { "v" => "verbose", "ss" => "short-summary", "s" => "summary" }
     HODEL_LOG_FORMAT_REGEX = /^(\w+ \d{2} \d{2}:\d{2}:\d{2})/
