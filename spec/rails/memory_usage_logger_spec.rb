@@ -43,7 +43,17 @@ end
 describe Oink::MemoryUsageLogger do
   unless defined? WIN32OLE
     describe "get_memory_usage" do
-      it "should work on linux" do
+      it "should work on linux with statm" do
+        pages = 6271
+        statm_file = "#{pages} 1157 411 1 0 763 0\n"
+
+        File.should_receive(:read).with("/proc/self/statm").and_return(statm_file)
+        controller = ApplicationController.new
+        controller.index 
+        controller.logger.log.should == [[:info, "Memory usage: #{pages * 4} | PID: #{$$}"]]
+      end
+
+      it "should work on linux with smaps" do
         proc_file = <<-STR
             Header
 
@@ -56,6 +66,7 @@ describe Oink::MemoryUsageLogger do
 
             STR
 
+        File.stub!(:read).and_raise(Errno::ENOENT.new("No such file or directory"))
         File.should_receive(:new).with("/proc/#{$$}/smaps").and_return(proc_file)
         controller = ApplicationController.new
         controller.index
@@ -63,6 +74,7 @@ describe Oink::MemoryUsageLogger do
       end
 
       it "should work on non-linux" do
+        File.stub!(:read).and_raise(Errno::ENOENT.new("No such file or directory"))
         File.stub!(:new).and_raise(Errno::ENOENT.new("No such file or directory"))
         controller = ApplicationController.new
         controller.index

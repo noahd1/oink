@@ -21,6 +21,8 @@ module Oink
             mem = wproc.WorkingSetSize
           end
           mem.to_i / 1000
+        elsif pages = File.read("/proc/self/statm") rescue nil
+          pages.to_i * 4 # NOTE: assumes 4k page size
         elsif proc_file = File.new("/proc/#{$$}/smaps") rescue nil
           proc_file.map do |line|
             size = line[/Size: *(\d+)/, 1] and size.to_i
