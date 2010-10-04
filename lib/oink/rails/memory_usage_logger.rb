@@ -21,6 +21,8 @@ module Oink
             mem = wproc.WorkingSetSize
           end
           mem.to_i / 1000
+        elsif pages = File.read("/proc/self/statm") rescue nil
+          pages.to_i * statm_page_size
         elsif proc_file = File.new("/proc/#{$$}/smaps") rescue nil
           proc_file.map do |line|
             size = line[/Size: *(\d+)/, 1] and size.to_i
@@ -28,6 +30,11 @@ module Oink
         else
           `ps -o vsz= -p #{$$}`.to_i
         end
+      end
+
+      # try to get and cache memory page size. falls back to 4096.
+      def statm_page_size
+        @statm_page_size ||= (`getconf PAGESIZE`.strip.to_i rescue 4096) / 1024
       end
 
       def log_memory_usage
