@@ -12,17 +12,17 @@ class ApplicationController
   end
 
   class << self
-    attr_accessor :after_filters
+    attr_accessor :around_filters
 
-    def after_filter method
-      (@after_filters ||= []) << method
+    def around_filter method
+      (@around_filters ||= []) << method
     end
   end
 
   include Oink::MemoryUsageLogger
 
   def index
-    run_after_filters
+    run_around_filters
   end
 
   def logger
@@ -35,8 +35,11 @@ class ApplicationController
   end
 
   protected
-  def run_after_filters
-    self.class.after_filters.each { |filter| self.send(filter) }
+  def run_around_filters
+    self.class.around_filters.each { |filter| self.send(filter) { perform_action } }
+  end
+
+  def perform_action
   end
 end
 

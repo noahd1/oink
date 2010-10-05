@@ -7,7 +7,7 @@ module Oink
   module MemoryUsageLogger
     def self.included(klass)
       klass.class_eval do
-        after_filter :log_memory_usage
+        around_filter :log_memory_usage
       end
     end
   
@@ -38,6 +38,7 @@ module Oink
       end
 
       def log_memory_usage
+        yield
         if logger
           memory_usage = get_memory_usage
           logger.info("Memory usage: #{memory_usage} | PID: #{$$}")
