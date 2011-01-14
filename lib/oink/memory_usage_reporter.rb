@@ -21,7 +21,7 @@ module Oink
           begin
             next unless line =~ HODEL_LOG_FORMAT_REGEX
           rescue => e
-            output.puts "\nSkipping malformed line" if @format == :verbose and e =~ /invalid byte sequence/
+            output.puts "\nSkipping malformed line" if @format == :verbose and e.message =~ /invalid byte sequence/
             next
           end
 
