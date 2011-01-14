@@ -2,7 +2,6 @@ require "date"
 require "oink/base"
 require "oink/oinked_request/oinked_memory_request"
 require "oink/priority_queue"
-require "iconv"
 
 module Oink
 
@@ -13,13 +12,18 @@ module Oink
     
       output.puts "\n-- REQUESTS --\n" if @format == :verbose
     
-      ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
       @inputs.each do |input|
         input.each_line do |line|
-          line = ic.iconv(line.strip + ' ')[0..-2]
+          line = line.strip
           
-           # Skip this line since we're only interested in the Hodel 3000 compliant lines
-          next unless line =~ HODEL_LOG_FORMAT_REGEX
+          # Skip this line since we're only interested in the Hodel 3000 compliant lines
+          # Also skip lines that have the wrong character encoding
+          begin
+            next unless line =~ HODEL_LOG_FORMAT_REGEX
+          rescue => e
+            output.puts "\nSkipping malformed line" if @format == :verbose and e =~ /invalid byte sequence/
+            next
+          end
 
           if line =~ /rails\[(\d+)\]/
             pid = $1
