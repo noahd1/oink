@@ -18,7 +18,12 @@ module Oink
           line = line.strip
           
            # Skip this line since we're only interested in the Hodel 3000 compliant lines
-          next unless line =~ HODEL_LOG_FORMAT_REGEX
+          begin
+            next unless line =~ HODEL_LOG_FORMAT_REGEX
+          rescue => e
+            output.puts "\nSkipping malformed line" if @format == :verbose and e.message =~ /invalid byte sequence/
+            next
+          end
 
           if line =~ /rails\[(\d+)\]/
             pid = $1
