@@ -1,5 +1,5 @@
 require "rubygems"
-require "spec"
+require "rspec"
 require 'ostruct'
 
 dir = File.dirname(__FILE__)
@@ -9,14 +9,14 @@ require "oink/rails/memory_usage_logger"
 require File.join(dir, '../config/environment')
 
 class PsuedoOutput < Array
-  
+
   def puts(line)
     self << line
   end
-  
+
 end
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
 
   config.before :suite do
     load File.join(dir, "../db/schema.rb")

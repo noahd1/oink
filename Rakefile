@@ -1,7 +1,7 @@
 require 'rubygems'
 require "rake/gempackagetask"
 require "rake/clean"
-require "spec/rake/spectask"
+require "rspec/core/rake_task"
 require './lib/oink/base.rb'
 
 begin
@@ -23,8 +23,8 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
-Spec::Rake::SpecTask.new do |t|
-  t.spec_opts == ["--color"]
+RSpec::Core::RakeTask.new do |t|
+  t.rspec_opts == ["--color"]
 end
 
 desc "Run the specs"
