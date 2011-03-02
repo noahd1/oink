@@ -1,2 +1,4 @@
 logs/*
 pkg
+.rvmrc
+.bundle

@@ -8,4 +8,7 @@ group :development do
   gem "jeweler"
   gem "rspec"
   gem "sqlite3"
+  gem "rack-test"
+  gem "rake"
+  gem "ruby-debug"
 end
