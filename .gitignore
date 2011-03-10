@@ -2,3 +2,4 @@ logs/*
 pkg
 .rvmrc
 .bundle
+.pairs

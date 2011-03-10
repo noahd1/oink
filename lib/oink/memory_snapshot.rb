@@ -45,7 +45,18 @@ module Oink
 
     # try to get and cache memory page size. falls back to 4096.
     def self.statm_page_size
-      @statm_page_size ||= (`getconf PAGESIZE`.strip.to_i rescue 4096) / 1024
+      @statm_page_size ||= begin
+        sys_call = SystemCall.execute("getconf PAGESIZE")
+        if sys_call.success?
+          sys_call.stdout.strip.to_i / 1024
+        else
+          4
+        end
+      end
+    end
+
+    def self.unset_statm_page_size
+      @statm_page_size = nil
     end
 
     def self.available?
@@ -79,4 +90,25 @@ module Oink
       `ps -o vsz= -p #{$$}` rescue false
     end
   end
+
+  class SystemCall
+
+    def initialize(cmd)
+      @stdout = `#{cmd}`
+    end
+
+    def self.execute(cmd)
+      new(cmd)
+    end
+
+    def stdout
+      @stdout
+    end
+
+    def success?
+      $?.success?
+    end
+
+  end
+
 end
