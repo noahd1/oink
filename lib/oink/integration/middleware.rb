@@ -14,14 +14,6 @@ module Oink
         self.class.logger
       end
 
-      def self.io=(io)
-        @@io = io
-      end
-
-      def self.io
-        @@io
-      end
-
       def initialize(app)
         @app = app
       end
