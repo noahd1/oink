@@ -26,27 +26,54 @@ describe Oink::StatmMemorySnapshot do
   end
 end
 
-describe Oink::MemorySnapshot do
-    describe "get_memory_usage" do
-      it "should work on linux with smaps" do
-        proc_file = <<-STR
-            Header
+describe Oink::SmapsMemorySnapshot do
 
-            Size: 25
-            Size: 13 trailing
+  it "returns a sum of the sizes in the /proc/$$/smaps file" do
+    proc_file = <<-STR
+        Header
 
-      leading Size: 4
+        Size: 25
+        Size: 13 trailing
 
-            Footer
+  leading Size: 4
 
-            STR
-        File.should_receive(:new).with("/proc/#{$$}/smaps").and_return(proc_file)
-        Oink::SmapsMemorySnapshot.new.memory.should == 42
-      end
+        Footer
 
-      it "should work on non-linux" do
-        Oink::ProcessStatusMemorySnapshot.should_receive(:`).and_return('915')
-        Oink::ProcessStatusMemorySnapshot.memory.should == 915
-      end
+        STR
+    File.should_receive(:new).with("/proc/#{$$}/smaps").and_return(proc_file)
+    Oink::SmapsMemorySnapshot.new.memory.should == 42
+  end
+
+end
+
+describe Oink::ProcessStatusMemorySnapshot do
+  it "returns the result of a PS command" do
+    system_call = mock(Oink::SystemCall, :stdout => "915")
+    Oink::SystemCall.should_receive(:execute).with("ps -o vsz= -p #{$$}").and_return(system_call)
+    Oink::ProcessStatusMemorySnapshot.new.memory.should == 915
+  end
+
+  describe "#available?" do
+    it "returns true if ps succeeds" do
+      system_call = mock(Oink::SystemCall, :success? => true)
+      Oink::SystemCall.should_receive(:execute).with("ps -o vsz= -p #{$$}").and_return(system_call)
+      Oink::ProcessStatusMemorySnapshot.available?.should be_true
     end
+  end
+end
+
+describe Oink::MemorySnapshot do
+  describe "#memory_snapshot_class" do
+    it "raises an Oink::MemoryDataUnavailableError if not strategies can be found" do
+      [Oink::WindowsMemorySnapshot, Oink::StatmMemorySnapshot, Oink::SmapsMemorySnapshot, Oink::ProcessStatusMemorySnapshot].each { |klass| klass.stub(:available? => false) }
+
+      lambda { Oink::MemorySnapshot.memory_snapshot_class }.should raise_error(Oink::MemoryDataUnavailableError)
+    end
+
+    it "returns the first available memory snapshot strategy" do
+      [Oink::WindowsMemorySnapshot, Oink::SmapsMemorySnapshot, Oink::ProcessStatusMemorySnapshot].each { |klass| klass.stub(:available? => false) }
+      Oink::StatmMemorySnapshot.stub(:available? => true)
+      Oink::MemorySnapshot.memory_snapshot_class.should == Oink::StatmMemorySnapshot
+    end
+  end
 end

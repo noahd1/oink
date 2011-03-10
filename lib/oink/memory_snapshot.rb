@@ -12,6 +12,9 @@ module Oink
          SmapsMemorySnapshot,
          ProcessStatusMemorySnapshot].find { |snapshot_class| snapshot_class.available? }
       end
+
+      raise MemoryDataUnavailableError if @@memory_snapshot_class.nil?
+      @@memory_snapshot_class
     end
   end
 
@@ -79,15 +82,11 @@ module Oink
 
   class ProcessStatusMemorySnapshot
     def memory
-      self.class.memory
-    end
-
-    def self.memory
-      `ps -o vsz= -p #{$$}`.to_i
+      SystemCall.execute("ps -o vsz= -p #{$$}").stdout.to_i
     end
 
     def self.available?
-      `ps -o vsz= -p #{$$}` rescue false
+      SystemCall.execute("ps -o vsz= -p #{$$}").success?
     end
   end
 
@@ -110,5 +109,7 @@ module Oink
     end
 
   end
+
+  class MemoryDataUnavailableError < StandardError; end
 
 end
