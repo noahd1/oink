@@ -13,8 +13,12 @@ module Oink
     def log_memory_usage
       yield
       if logger
-        memory_usage = MemorySnapshot.memory
-        logger.info("Memory usage: #{memory_usage} | PID: #{$$}")
+        begin
+          memory_usage = MemorySnapshot.memory
+          logger.info("Memory usage: #{memory_usage} | PID: #{$$}")
+        rescue Oink::MemoryDataUnavailableError => e
+          logger.error("Oink unable to retrieve memory on this system. See Oink::MemorySnapshot in source.")
+        end
       end
     end
   end

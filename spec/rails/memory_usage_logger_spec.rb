@@ -8,6 +8,10 @@ class ApplicationController
     def info(*args)
       (@log ||= []) << [:info, *args]
     end
+
+    def error(*args)
+      (@log ||= []) << [:error, *args]
+    end
   end
 
   class << self
@@ -43,5 +47,13 @@ describe Oink::MemoryUsageLogger do
     controller = ApplicationController.new
     controller.index
     [[:info, "Memory usage: 42 | PID: #{$$}"]].should == controller.logger.log
+  end
+
+  it "should log an error message if cannot find a memory snapshot strategy" do
+    Oink::MemorySnapshot.should_receive("memory").and_raise(Oink::MemoryDataUnavailableError)
+    controller = ApplicationController.new
+    lambda {
+      controller.index
+    }.should_not raise_error
   end
 end
