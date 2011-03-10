@@ -2,18 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
 
 class ApplicationController
 
-  class Logger
-    attr_accessor :log
-
-    def info(*args)
-      (@log ||= []) << [:info, *args]
-    end
-
-    def error(*args)
-      (@log ||= []) << [:error, *args]
-    end
-  end
-
   class << self
     attr_accessor :around_filters
 
@@ -29,7 +17,7 @@ class ApplicationController
   end
 
   def logger
-    @logger ||= Logger.new
+    @logger ||= MemoryLogger.new
   end
 
   protected

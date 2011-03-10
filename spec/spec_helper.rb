@@ -15,6 +15,18 @@ class PsuedoOutput < Array
 
 end
 
+class MemoryLogger
+  attr_accessor :log
+
+  def info(*args)
+    (@log ||= []) << [:info, *args]
+  end
+
+  def error(*args)
+    (@log ||= []) << [:error, *args]
+  end
+end
+
 RSpec.configure do |config|
 
   config.before :suite do
