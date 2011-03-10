@@ -1,6 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
 require "oink/integration/middleware"
 require 'rack/test'
+require 'logger'
 
 describe Oink::Integration::Middleware do
   include Rack::Test::Methods
@@ -21,27 +22,23 @@ describe Oink::Integration::Middleware do
     end
   end
 
-  def app
-    Oink::Integration::Middleware.new(SampleApplication.new)
-  end
-
-  before do
-    Oink::Integration::Middleware.logger = MemoryLogger.new
-  end
+  let(:log_output)  { StringIO.new }
+  let(:logger)      { Logger.new(log_output) }
+  let(:app)         { Oink::Integration::Middleware.new(SampleApplication.new, logger) }
 
   it "reports 0 totals" do
     get "/do_nothing"
-    Oink::Integration::Middleware.logger.log.should include([:info, "Instantiation Breakdown: Total: 0"])
+    log_output.string.should include("Instantiation Breakdown: Total: 0")
   end
 
   it "reports pigs instantiated" do
     get "/instantiate_pigs"
-    Oink::Integration::Middleware.logger.log.should include([:info, "Instantiation Breakdown: Pig: 2 | Total: 2"])
+    log_output.string.should include("Instantiation Breakdown: Pig: 2 | Total: 2")
   end
 
   it "reports pigs and pens instantiated" do
     get "/instantiate_pigs_and_pens"
-    Oink::Integration::Middleware.logger.log.should include([:info, "Instantiation Breakdown: Total: 3 | Pig: 2 | Pen: 1"])
+    log_output.string.should include("Instantiation Breakdown: Total: 3 | Pig: 2 | Pen: 1")
   end
 
 end
