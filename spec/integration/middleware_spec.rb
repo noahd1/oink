@@ -26,22 +26,22 @@ describe Oink::Integration::Middleware do
   end
 
   before do
-    Oink::Integration::Middleware.io = ""
+    Oink::Integration::Middleware.logger = MemoryLogger.new
   end
 
   it "reports 0 totals" do
     get "/do_nothing"
-    Oink::Integration::Middleware.io.should == "Instantiation Breakdown: Total: 0"
+    Oink::Integration::Middleware.logger.log.should include([:info, "Instantiation Breakdown: Total: 0"])
   end
 
   it "reports pigs instantiated" do
     get "/instantiate_pigs"
-    Oink::Integration::Middleware.io.should == "Instantiation Breakdown: Pig: 2 | Total: 2"
+    Oink::Integration::Middleware.logger.log.should include([:info, "Instantiation Breakdown: Pig: 2 | Total: 2"])
   end
 
   it "reports pigs and pens instantiated" do
     get "/instantiate_pigs_and_pens"
-    Oink::Integration::Middleware.io.should == "Instantiation Breakdown: Total: 3 | Pig: 2 | Pen: 1"
+    Oink::Integration::Middleware.logger.log.should include([:info, "Instantiation Breakdown: Total: 3 | Pig: 2 | Pen: 1"])
   end
 
 end
