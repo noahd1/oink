@@ -1,5 +1,6 @@
 require "rspec"
-require 'ostruct'
+require "ostruct"
+require "logger"
 
 dir = File.dirname(__FILE__)
 require File.join(dir, "/../lib/oink.rb")
@@ -15,19 +16,11 @@ class PsuedoOutput < Array
 
 end
 
-class MemoryLogger
-  attr_accessor :log
-
-  def info(*args)
-    (@log ||= []) << [:info, *args]
-  end
-
-  def error(*args)
-    (@log ||= []) << [:error, *args]
-  end
-end
-
 class FakeApplicationController
+
+  def initialize(logger = Logger.new(StringIO.new))
+    @logger = logger
+  end
 
   class << self
     attr_accessor :around_filters
@@ -42,7 +35,7 @@ class FakeApplicationController
   end
 
   def logger
-    @logger ||= MemoryLogger.new
+    @logger
   end
 
   protected
