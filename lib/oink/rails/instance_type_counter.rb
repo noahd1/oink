@@ -13,7 +13,7 @@ module Oink
       ActiveRecord::Base.send(:include, OinkInstanceTypeCounterInstanceMethods)
 
       klass.class_eval do
-        after_filter :report_instance_type_count
+        around_filter :report_instance_type_count
       end
     end
 
@@ -23,8 +23,9 @@ module Oink
     private
 
       def report_instance_type_count
-        report_hash = ActiveRecord::Base.instantiated_hash.merge("Total" => ActiveRecord::Base.total_objects_instantiated)
-        breakdown = report_hash.sort{|a,b| b[1]<=>a[1]}.collect {|k,v| "#{k}: #{v}" }.join(" | ")
+        sorted_list = Oink::HashUtils.to_sorted_array(ActiveRecord::Base.instantiated_hash)
+        sorted_list.unshift("Total: #{ActiveRecord::Base.total_objects_instantiated}")
+        breakdown = sorted_list.join(" | ")
         before_report_active_record_count(breakdown)
         if logger
           logger.info("Instantiation Breakdown: #{breakdown}")

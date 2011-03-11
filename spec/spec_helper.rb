@@ -27,6 +27,33 @@ class MemoryLogger
   end
 end
 
+class FakeApplicationController
+
+  class << self
+    attr_accessor :around_filters
+
+    def around_filter method
+      (@around_filters ||= []) << method
+    end
+  end
+
+  def index
+    run_around_filters
+  end
+
+  def logger
+    @logger ||= MemoryLogger.new
+  end
+
+  protected
+  def run_around_filters
+    self.class.around_filters.each { |filter| self.send(filter) { perform_action } }
+  end
+
+  def perform_action
+  end
+end
+
 RSpec.configure do |config|
 
   config.before :suite do

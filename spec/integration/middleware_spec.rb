@@ -9,11 +9,11 @@ describe Oink::Integration::Middleware do
   class SampleApplication
     def call(env)
       case env['PATH_INFO']
-      when "/do_nothing"
-      when "/instantiate_pigs"
+      when "/no_pigs"
+      when "/two_pigs"
         Pig.create(:name => "Babe")
         Pig.first
-      when "/instantiate_pigs_and_pens"
+      when "/two_pigs_in_a_pen"
         Pig.create(:name => "Babe")
         Pen.create(:location => "Backyard")
         Pig.first
@@ -27,17 +27,17 @@ describe Oink::Integration::Middleware do
   let(:app)         { Oink::Integration::Middleware.new(SampleApplication.new, logger) }
 
   it "reports 0 totals" do
-    get "/do_nothing"
+    get "/no_pigs"
     log_output.string.should include("Instantiation Breakdown: Total: 0")
   end
 
-  it "reports pigs instantiated" do
-    get "/instantiate_pigs"
-    log_output.string.should include("Instantiation Breakdown: Pig: 2 | Total: 2")
+  it "reports totals first even if it's a tie" do
+    get "/two_pigs"
+    log_output.string.should include("Instantiation Breakdown: Total: 2 | Pig: 2")
   end
 
   it "reports pigs and pens instantiated" do
-    get "/instantiate_pigs_and_pens"
+    get "/two_pigs_in_a_pen"
     log_output.string.should include("Instantiation Breakdown: Total: 3 | Pig: 2 | Pen: 1")
   end
 
