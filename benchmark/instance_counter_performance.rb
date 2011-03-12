@@ -30,7 +30,7 @@ Benchmark.bm(15) do |x|
   end
 
   x.report "with instance type counter - instating 40,000 objects" do
-    ActiveRecord::Base.send(:include, Oink::OinkInstanceTypeCounterInstanceMethods)
+    ActiveRecord::Base.send(:include, Oink::ActiveRecord)
 
     40_000.times do
       User.new

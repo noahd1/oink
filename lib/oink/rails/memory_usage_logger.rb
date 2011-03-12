@@ -1,4 +1,4 @@
-require 'oink/memory_snapshot'
+require 'oink/instrumentation/memory_snapshot'
 
 module Oink
   module MemoryUsageLogger
@@ -14,9 +14,9 @@ module Oink
       yield
       if logger
         begin
-          memory_usage = MemorySnapshot.memory
+          memory_usage = Instrumentation::MemorySnapshot.memory
           logger.info("Memory usage: #{memory_usage} | PID: #{$$}")
-        rescue Oink::MemoryDataUnavailableError => e
+        rescue Oink::Instrumentation::MemoryDataUnavailableError => e
           logger.error("Oink unable to retrieve memory on this system. See Oink::MemorySnapshot in source.")
         end
       end
