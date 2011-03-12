@@ -59,7 +59,6 @@ RSpec.configure do |config|
   end
 
   config.before :suite do
-    ActiveRecord::Base.send(:include, Oink::Instrumentation::ActiveRecord)
     Pig = Class.new(ActiveRecord::Base)
     Pen = Class.new(ActiveRecord::Base)
     Pig.belongs_to :pen
