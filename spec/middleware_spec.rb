@@ -1,9 +1,9 @@
-require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
-require "oink/integration/middleware"
+require File.expand_path(File.dirname(__FILE__) + "/spec_helper")
+require "oink/middleware"
 require 'rack/test'
 require 'logger'
 
-describe Oink::Integration::Middleware do
+describe Oink::Middleware do
   include Rack::Test::Methods
 
   class SampleApplication
@@ -24,7 +24,7 @@ describe Oink::Integration::Middleware do
 
   let(:log_output)  { StringIO.new }
   let(:logger)      { Logger.new(log_output) }
-  let(:app)         { Oink::Integration::Middleware.new(SampleApplication.new, logger) }
+  let(:app)         { Oink::Middleware.new(SampleApplication.new, logger) }
 
   it "reports 0 totals" do
     get "/no_pigs"
