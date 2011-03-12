@@ -2,6 +2,7 @@ module Oink
   class Middleware
 
     def initialize(app, logger = Hodel3000CompliantLogger.new("oink.log"))
+      ActiveRecord::Base.send(:include, Oink::Instrumentation::ActiveRecord)
       @app = app
       @logger = logger
     end
