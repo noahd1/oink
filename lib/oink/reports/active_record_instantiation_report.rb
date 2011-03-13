@@ -5,7 +5,7 @@ require "oink/reports/priority_queue"
 
 module Oink
   module Reports
-    class ActiveRecordInstantiationReporter < Base
+    class ActiveRecordInstantiationReport < Base
 
       def print(output)
         output.puts "---- OINK FOR ACTIVERECORD ----"

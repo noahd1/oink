@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + "/../../spec_helper")
 
 module Oink::Reports
-  describe ActiveRecordInstantiationReporter do
+  describe ActiveRecordInstantiationReport do
 
     describe "short summary with frequent offenders" do
 
@@ -14,7 +14,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        ActiveRecordInstantiationReporter.new(io, 50).print(output)
+        ActiveRecordInstantiationReport.new(io, 50).print(output)
         output.should include("1, Users#show")
       end
 
@@ -27,7 +27,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        ActiveRecordInstantiationReporter.new(io, 50).print(output)
+        ActiveRecordInstantiationReport.new(io, 50).print(output)
         output.should_not include("1, Users#show")
       end
 
@@ -43,7 +43,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        ActiveRecordInstantiationReporter.new(io, 50).print(output)
+        ActiveRecordInstantiationReport.new(io, 50).print(output)
         output.should include("2, Users#show")
       end
 
@@ -62,7 +62,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        ActiveRecordInstantiationReporter.new(io, 50).print(output)
+        ActiveRecordInstantiationReport.new(io, 50).print(output)
         output[-2].should == "2, Media#show"
         output[-1].should == "1, Users#show"
       end
@@ -80,7 +80,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        ActiveRecordInstantiationReporter.new(io, 50).print(output)
+        ActiveRecordInstantiationReport.new(io, 50).print(output)
         output.should include("1, Users#show")
       end
 
@@ -97,7 +97,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        ActiveRecordInstantiationReporter.new(io, 50).print(output)
+        ActiveRecordInstantiationReport.new(io, 50).print(output)
         output.should include("1. Feb 01 01:58:31, 51, Users#show")
       end
 
@@ -110,7 +110,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        ActiveRecordInstantiationReporter.new(io, 50).print(output)
+        ActiveRecordInstantiationReport.new(io, 50).print(output)
         output.should_not include("1. Feb 01 01:58:31, 50, Users#show")
       end
 
@@ -126,7 +126,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        ActiveRecordInstantiationReporter.new(io, 50).print(output)
+        ActiveRecordInstantiationReport.new(io, 50).print(output)
         output[4].should == "1. Feb 01 01:58:34, 100, MediaController#show"
         output[5].should == "2. Feb 01 01:58:31, 75, DetailsController#show"
       end
@@ -142,7 +142,7 @@ module Oink::Reports
         STR
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        ActiveRecordInstantiationReporter.new(io, 50, :format => :verbose).print(output)
+        ActiveRecordInstantiationReport.new(io, 50, :format => :verbose).print(output)
         output[3..5].should == str.split("\n")[0..2].map { |o| o.strip }
       end
 
@@ -159,7 +159,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        ActiveRecordInstantiationReporter.new(io, 50, :format => :verbose).print(output)
+        ActiveRecordInstantiationReport.new(io, 50, :format => :verbose).print(output)
         output[3..5].should == str.split("\n")[4..6].map { |o| o.strip }
       end
     end
@@ -182,7 +182,7 @@ module Oink::Reports
         io1 = StringIO.new(str1)
         io2 = StringIO.new(str2)
         output = PsuedoOutput.new
-        ActiveRecordInstantiationReporter.new([io1, io2], 50).print(output)
+        ActiveRecordInstantiationReport.new([io1, io2], 50).print(output)
         output.should include("2, MediaController#show")
       end
 

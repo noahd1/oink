@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + "/../../spec_helper")
 
 module Oink::Reports
-  describe MemoryUsageReporter do
+  describe MemoryUsageReport do
 
     TEN_MEGS = 10 * 1024
 
@@ -19,7 +19,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        MemoryUsageReporter.new(io, TEN_MEGS).print(output)
+        MemoryUsageReport.new(io, TEN_MEGS).print(output)
         output.should include("1, MediaController#show")
       end
 
@@ -37,7 +37,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        MemoryUsageReporter.new(io, TEN_MEGS).print(output)
+        MemoryUsageReport.new(io, TEN_MEGS).print(output)
         output.should_not include("1, MediaController#show")
       end
 
@@ -56,7 +56,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        MemoryUsageReporter.new(io, TEN_MEGS).print(output)
+        MemoryUsageReport.new(io, TEN_MEGS).print(output)
         output.should include("2, MediaController#show")
       end
 
@@ -78,7 +78,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        MemoryUsageReporter.new(io, TEN_MEGS).print(output)
+        MemoryUsageReport.new(io, TEN_MEGS).print(output)
         output[-2].should == "2, MediaController#show"
         output[-1].should == "1, Users#show"
       end
@@ -97,7 +97,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        MemoryUsageReporter.new(io, TEN_MEGS).print(output)
+        MemoryUsageReport.new(io, TEN_MEGS).print(output)
         output.should_not include("1, MediaController#show")
       end
 
@@ -113,7 +113,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        MemoryUsageReporter.new(io, TEN_MEGS).print(output)
+        MemoryUsageReport.new(io, TEN_MEGS).print(output)
         output.should_not include("1, MediaController#show")
       end
 
@@ -131,7 +131,7 @@ module Oink::Reports
 
           io = StringIO.new(str)
           output = PsuedoOutput.new
-          MemoryUsageReporter.new(io, TEN_MEGS).print(output)
+          MemoryUsageReport.new(io, TEN_MEGS).print(output)
           output.should include("1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show")
         end
 
@@ -147,7 +147,7 @@ module Oink::Reports
 
           io = StringIO.new(str)
           output = PsuedoOutput.new
-          MemoryUsageReporter.new(io, TEN_MEGS).print(output)
+          MemoryUsageReport.new(io, TEN_MEGS).print(output)
           output.should_not include("1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show")
         end
 
@@ -166,7 +166,7 @@ module Oink::Reports
 
           io = StringIO.new(str)
           output = PsuedoOutput.new
-          MemoryUsageReporter.new(io, TEN_MEGS).print(output)
+          MemoryUsageReport.new(io, TEN_MEGS).print(output)
           output[4].should == "1. Feb 01 01:58:34, #{TEN_MEGS + 1} KB, MediaController#show"
           output[5].should == "2. Feb 01 01:58:37, #{TEN_MEGS + 1} KB, DetailsController#show"
         end
@@ -185,7 +185,7 @@ module Oink::Reports
       #
       #   io = StringIO.new(str)
       #   output = PsuedoOutput.new
-      #   MemoryUsageReporter.new(io, TEN_MEGS).each_line do |line|
+      #   MemoryUsageReport.new(io, TEN_MEGS).each_line do |line|
       #     output << line
       #   end
       #   output.first.should == "Feb 01 01:58:29 - Mar 13 03:58:30"
@@ -207,7 +207,7 @@ module Oink::Reports
         STR
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        MemoryUsageReporter.new(io, TEN_MEGS, :format => :verbose).print(output)
+        MemoryUsageReport.new(io, TEN_MEGS, :format => :verbose).print(output)
         output[3..6].should == str.split("\n")[4..7].map { |o| o.strip }
       end
 
@@ -228,7 +228,7 @@ module Oink::Reports
 
         io = StringIO.new(str)
         output = PsuedoOutput.new
-        MemoryUsageReporter.new(io, TEN_MEGS, :format => :verbose).print(output)
+        MemoryUsageReport.new(io, TEN_MEGS, :format => :verbose).print(output)
         output[3..5].should == str.split("\n")[6..8].map { |o| o.strip }
       end
     end
@@ -257,7 +257,7 @@ module Oink::Reports
         io1 = StringIO.new(str1)
         io2 = StringIO.new(str2)
         output = PsuedoOutput.new
-        MemoryUsageReporter.new([io1, io2], TEN_MEGS).print(output)
+        MemoryUsageReport.new([io1, io2], TEN_MEGS).print(output)
         output.should include("2, MediaController#show")
       end
 

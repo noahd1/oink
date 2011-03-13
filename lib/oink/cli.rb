@@ -62,13 +62,13 @@ module Oink
         options[:threshold] ||= 75
         options[:threshold] *= 1024
 
-        Oink::Reports::MemoryUsageReporter.new(handles, options[:threshold], :format => options[:format]).print(output)
+        Oink::Reports::MemoryUsageReport.new(handles, options[:threshold], :format => options[:format]).print(output)
 
       elsif options[:type] == :active_record
 
         options[:threshold] ||= 500
 
-        Oink::Reports::ActiveRecordInstantiationReporter.new(handles, options[:threshold], :format => options[:format]).print(output)
+        Oink::Reports::ActiveRecordInstantiationReport.new(handles, options[:threshold], :format => options[:format]).print(output)
 
       end
 

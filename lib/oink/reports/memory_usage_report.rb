@@ -5,7 +5,7 @@ require "oink/reports/priority_queue"
 
 module Oink
   module Reports
-    class MemoryUsageReporter < Base
+    class MemoryUsageReport < Base
       def print(output)
         output.puts "---- MEMORY THRESHOLD ----"
         output.puts "THRESHOLD: #{@threshold/1024} MB\n"
