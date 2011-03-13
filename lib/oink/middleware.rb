@@ -9,9 +9,15 @@ module Oink
 
     def call(env)
       status, headers, body = @app.call(env)
+      log_memory_snapshot
       log_objects_instantiated
       reset_objects_instantiated
       [status, headers, body]
+    end
+
+    def log_memory_snapshot
+      memory = Oink::Instrumentation::MemorySnapshot.memory
+      @logger.info("Memory usage: #{memory} | PID: #{$$}")
     end
 
     def log_objects_instantiated

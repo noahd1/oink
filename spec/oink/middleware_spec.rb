@@ -26,6 +26,10 @@ describe Oink::Middleware do
   let(:logger)      { Logger.new(log_output) }
   let(:app)         { Oink::Middleware.new(SampleApplication.new, logger) }
 
+  before do
+    Oink::Instrumentation::MemorySnapshot.stub(:memory => 4092)
+  end
+
   it "reports 0 totals" do
     get "/no_pigs"
     log_output.string.should include("Instantiation Breakdown: Total: 0")
@@ -39,6 +43,12 @@ describe Oink::Middleware do
   it "reports pigs and pens instantiated" do
     get "/two_pigs_in_a_pen"
     log_output.string.should include("Instantiation Breakdown: Total: 3 | Pig: 2 | Pen: 1")
+  end
+
+  it "logs memory usage" do
+    Oink::Instrumentation::MemorySnapshot.should_receive(:memory).and_return(4092)
+    get "/two_pigs_in_a_pen"
+    log_output.string.should include("Memory usage: 4092 | PID: #{$$}")
   end
 
 end
