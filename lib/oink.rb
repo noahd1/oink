@@ -1,5 +1,5 @@
-require "oink/memory_usage_reporter"
-require "oink/active_record_instantiation_reporter"
+require "oink/reports/memory_usage_reporter"
+require "oink/reports/active_record_instantiation_reporter"
 require 'oink/hash_utils'
 require "oink/cli"
 

@@ -1,11 +1,11 @@
 require 'optparse'
 
 class Cli
-  
+
   def initialize(args)
     @args = args
   end
-  
+
   def process
     options = { :format => :short_summary, :type => :memory }
 
@@ -21,8 +21,8 @@ class Cli
         options[:output_file] = filename
       end
 
-      format_list = (Oink::MemoryUsageReporter::FORMAT_ALIASES.keys + Oink::MemoryUsageReporter::FORMATS).join(',')
-      opts.on("--format FORMAT", Oink::MemoryUsageReporter::FORMATS, Oink::MemoryUsageReporter::FORMAT_ALIASES, "Select format",
+      format_list = (Oink::Reports::Base::FORMAT_ALIASES.keys + Oink::Reports::Base::FORMATS).join(',')
+      opts.on("--format FORMAT", Oink::Reports::Base::FORMATS, Oink::Reports::Base::FORMAT_ALIASES, "Select format",
               "  (#{format_list})") do |format|
         options[:format] = format.to_sym
       end
@@ -61,20 +61,20 @@ class Cli
       options[:threshold] ||= 75
       options[:threshold] *= 1024
 
-      Oink::MemoryUsageReporter.new(handles, options[:threshold], :format => options[:format]).print(output)
+      Oink::Reports::MemoryUsageReporter.new(handles, options[:threshold], :format => options[:format]).print(output)
 
     elsif options[:type] == :active_record
 
       options[:threshold] ||= 500
 
-      Oink::ActiveRecordInstantiationReporter.new(handles, options[:threshold], :format => options[:format]).print(output)
+      Oink::Reports::ActiveRecordInstantiationReporter.new(handles, options[:threshold], :format => options[:format]).print(output)
 
     end
 
     output.close
-    handles.each { |h| h.close }    
+    handles.each { |h| h.close }
   end
-  
+
 protected
 
   def get_file_listing(args)

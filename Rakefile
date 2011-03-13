@@ -1,13 +1,12 @@
 require "rake/gempackagetask"
 require "rake/clean"
 require "rspec/core/rake_task"
-require './lib/oink/base.rb'
 
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name         = "oink"
-    s.version      = Oink::Base::VERSION
+    s.version      = "0.1.2"
     s.author       = "Noah Davis"
     s.email        = "noahd1" + "@" + "yahoo.com"
     s.homepage     = "http://github.com/noahd1/oink"
