@@ -1,7 +1,7 @@
 require "date"
 require "oink/reports/base"
 require "oink/oinked_request/oinked_memory_request"
-require "oink/priority_queue"
+require "oink/reports/priority_queue"
 
 module Oink
   module Reports
