@@ -28,6 +28,8 @@ describe Oink::Middleware do
 
   before do
     Oink::Instrumentation::MemorySnapshot.stub(:memory => 4092)
+    Pig.delete_all
+    Pen.delete_all
   end
 
   it "reports 0 totals" do

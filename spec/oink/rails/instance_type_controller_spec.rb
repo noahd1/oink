@@ -24,6 +24,11 @@ end
 
 describe Oink::MemoryUsageLogger do
 
+  before do
+    Pig.delete_all
+    Pen.delete_all
+  end
+
   let(:log_output)  { StringIO.new }
   let(:logger)      { Logger.new(log_output) }
 

@@ -1,8 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + "/../../spec_helper")
 
 describe Oink::Instrumentation::ActiveRecord do
-  before :each do
+  before do
     ActiveRecord::Base.reset_instance_type_count
+    Pig.delete_all
+    Pen.delete_all
   end
 
   describe "hash" do
