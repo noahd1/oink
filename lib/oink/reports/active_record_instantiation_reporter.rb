@@ -1,6 +1,6 @@
 require "date"
 require "oink/reports/base"
-require "oink/oinked_request/oinked_ar_request"
+require "oink/reports/active_record_instantiation_oinked_request"
 require "oink/reports/priority_queue"
 
 module Oink
@@ -44,7 +44,7 @@ module Oink
                 @bad_actions[@pids[pid][:action]] ||= 0
                 @bad_actions[@pids[pid][:action]] = @bad_actions[@pids[pid][:action]] + 1
                 date = HODEL_LOG_FORMAT_REGEX.match(line).captures[0]
-                @bad_requests.push(OinkedARRequest.new(@pids[pid][:action], date, @pids[pid][:buffer], @pids[pid][:ar_count]))
+                @bad_requests.push(ActiveRecordInstantiationOinkedRequest.new(@pids[pid][:action], date, @pids[pid][:buffer], @pids[pid][:ar_count]))
                 if @format == :verbose
                   @pids[pid][:buffer].each { |b| output.puts b }
                   output.puts "---------------------------------------------------------------------"
