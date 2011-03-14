@@ -1,3 +1,7 @@
+require 'hodel_3000_compliant_logger'
+require 'oink/utils/hash_utils'
+require 'oink/instrumentation'
+
 module Oink
   class Middleware
 

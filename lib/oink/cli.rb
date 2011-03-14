@@ -1,4 +1,7 @@
 require 'optparse'
+require 'oink/reports/base'
+require 'oink/reports/active_record_instantiation_report'
+require 'oink/reports/memory_usage_report'
 
 module Oink
   class Cli

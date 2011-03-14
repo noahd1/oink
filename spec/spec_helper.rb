@@ -2,14 +2,12 @@ require "rspec"
 require "ostruct"
 require "logger"
 
-dir = File.dirname(__FILE__)
-require File.join(dir, "/../lib/oink.rb")
-require "oink/rails/instance_type_counter"
-require "oink/rails/memory_usage_logger"
-
 require 'helpers/database'
 require 'fakes/fake_application_controller'
 require 'fakes/psuedo_output'
+
+require 'oink/cli'
+require 'oink/rails'
 
 RSpec.configure do |config|
 

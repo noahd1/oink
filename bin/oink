@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require File.dirname(__FILE__) + "/../lib/oink.rb"
+require File.dirname(__FILE__) + "/../lib/oink/cli.rb"
 Oink::Cli.new(ARGV.dup).process
 

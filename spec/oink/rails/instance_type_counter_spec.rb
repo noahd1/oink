@@ -22,7 +22,7 @@ class ARCountApplicationController < FakeApplicationController
 
 end
 
-describe Oink::MemoryUsageLogger do
+describe Oink::InstanceTypeCounter do
 
   before do
     Pig.delete_all

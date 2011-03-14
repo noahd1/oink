@@ -1,4 +1,5 @@
 require 'oink/instrumentation/active_record'
+require 'oink/utils/hash_utils'
 
 module Oink
 
