@@ -9,7 +9,7 @@ module Oink::Reports
         str = <<-STR
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 51 | User: 51
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         STR
 
         io = StringIO.new(str)
@@ -22,7 +22,7 @@ module Oink::Reports
         str = <<-STR
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 50 | User: 50
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         STR
 
         io = StringIO.new(str)
@@ -35,10 +35,10 @@ module Oink::Reports
         str = <<-STR
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 51 | User: 51
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 51 | User: 51
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         STR
 
         io = StringIO.new(str)
@@ -51,13 +51,13 @@ module Oink::Reports
         str = <<-STR
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Media#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 51 | User: 51
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Media#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 51 | User: 51
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 51 | User: 51
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         STR
 
         io = StringIO.new(str)
@@ -71,11 +71,11 @@ module Oink::Reports
         str = <<-STR
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Media#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 24 | User: 24
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Media#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 51 | User: 51
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         STR
 
         io = StringIO.new(str)
@@ -92,7 +92,7 @@ module Oink::Reports
         str = <<-STR
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 51 | User: 51
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         STR
 
         io = StringIO.new(str)
@@ -105,7 +105,7 @@ module Oink::Reports
         str = <<-STR
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 50 | User: 50
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         STR
 
         io = StringIO.new(str)
@@ -118,10 +118,10 @@ module Oink::Reports
         str = <<-STR
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing DetailsController#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 75 | User: 75
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         Feb 01 01:58:32 ey04-s00297 rails[4413]: Processing MediaController#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:33 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 100 | User: 100
-        Feb 01 01:58:34 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:34 ey04-s00297 rails[4413]: Completed in
         STR
 
         io = StringIO.new(str)
@@ -138,7 +138,7 @@ module Oink::Reports
         str = <<-STR
         Feb 01 01:58:32 ey04-s00297 rails[4413]: Processing MediaController#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:33 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 100 | User: 100
-        Feb 01 01:58:34 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:34 ey04-s00297 rails[4413]: Completed in
         STR
         io = StringIO.new(str)
         output = PsuedoOutput.new
@@ -150,11 +150,11 @@ module Oink::Reports
         str = <<-STR
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Media#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 24 | User: 24
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Media#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:30 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 51 | User: 51
-        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:31 ey04-s00297 rails[4413]: Completed in
         STR
 
         io = StringIO.new(str)
@@ -170,13 +170,13 @@ module Oink::Reports
         str1 = <<-STR
         Feb 01 01:58:32 ey04-s00297 rails[4413]: Processing MediaController#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:33 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 100 | User: 100
-        Feb 01 01:58:34 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:34 ey04-s00297 rails[4413]: Completed in
         STR
 
         str2 = <<-STR
         Feb 01 01:58:32 ey04-s00297 rails[4413]: Processing MediaController#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
         Feb 01 01:58:33 ey04-s00297 rails[4413]: Instantiation Breakdown: Total: 100 | User: 100
-        Feb 01 01:58:34 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:34 ey04-s00297 rails[4413]: Completed in
         STR
 
         io1 = StringIO.new(str1)

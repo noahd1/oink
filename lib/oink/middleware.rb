@@ -13,6 +13,7 @@ module Oink
 
     def call(env)
       status, headers, body = @app.call(env)
+      @logger.info("Completed in")
       log_memory_snapshot
       log_objects_instantiated
       reset_objects_instantiated

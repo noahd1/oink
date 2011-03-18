@@ -22,13 +22,26 @@ describe Oink::Middleware do
   end
 
   let(:log_output)  { StringIO.new }
-  let(:logger)      { Logger.new(log_output) }
+  let(:logger)      { Hodel3000CompliantLogger.new(log_output) }
   let(:app)         { Oink::Middleware.new(SampleApplication.new, logger) }
 
   before do
     Oink::Instrumentation::MemorySnapshot.stub(:memory => 4092)
     Pig.delete_all
     Pen.delete_all
+  end
+
+
+  context "support legacy rails log format in transition to oink's own log format" do
+    it "writes rails[pid] to the log even if the app isn't a rails app (for now)" do
+      get "/no_pigs"
+      log_output.string.should include("rails[#{$$}]")
+    end
+
+    it "writes 'Completed in' after the request has completed" do
+      get "/no_pigs"
+      log_output.string.should include("Completed in")
+    end
   end
 
   it "reports 0 totals" do
