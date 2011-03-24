@@ -13,11 +13,20 @@ module Oink
 
     def call(env)
       status, headers, body = @app.call(env)
+      log_routing_information(env)
       @logger.info("Completed in")
       log_memory_snapshot
       log_objects_instantiated
       reset_objects_instantiated
       [status, headers, body]
+    end
+
+    def log_routing_information(env)
+      if env.has_key?('action_dispatch.request.parameters')
+        controller = env['action_dispatch.request.parameters']['controller']
+        action = env['action_dispatch.request.parameters']['action']
+        @logger.info "Processing #{controller}##{action}"
+      end
     end
 
     def log_memory_snapshot

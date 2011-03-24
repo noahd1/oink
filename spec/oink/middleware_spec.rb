@@ -42,6 +42,11 @@ describe Oink::Middleware do
       get "/no_pigs"
       log_output.string.should include("Completed in")
     end
+
+    it "logs the action and controller" do
+      get "/no_pigs", {}, {'action_dispatch.request.parameters' => {'controller' => 'oinkoink', 'action' => 'piggie'}}
+      log_output.string.should include("Processing oinkoink#piggie")
+    end
   end
 
   it "reports 0 totals" do
