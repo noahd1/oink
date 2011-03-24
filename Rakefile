@@ -14,7 +14,6 @@ begin
     s.description  = s.summary
     s.executables  = "oink"
     s.files        = %w[History.txt MIT-LICENSE README.rdoc Rakefile] + Dir["bin/*"] + Dir["lib/**/*"]
-    s.add_dependency 'hodel_3000_compliant_logger'
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

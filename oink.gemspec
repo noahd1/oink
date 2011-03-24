@@ -73,7 +73,6 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rack-test>, [">= 0"])
       s.add_development_dependency(%q<rake>, [">= 0"])
       s.add_development_dependency(%q<ruby-debug>, [">= 0"])
-      s.add_runtime_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
     else
       s.add_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
       s.add_dependency(%q<activerecord>, [">= 0"])
@@ -83,7 +82,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rack-test>, [">= 0"])
       s.add_dependency(%q<rake>, [">= 0"])
       s.add_dependency(%q<ruby-debug>, [">= 0"])
-      s.add_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
     end
   else
     s.add_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
@@ -94,7 +92,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rack-test>, [">= 0"])
     s.add_dependency(%q<rake>, [">= 0"])
     s.add_dependency(%q<ruby-debug>, [">= 0"])
-    s.add_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
   end
 end
 
