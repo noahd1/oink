@@ -5,9 +5,14 @@ require 'oink/instrumentation'
 module Oink
   class Middleware
 
-    def initialize(app, logpath = "log/oink.log")
-      ActiveRecord::Base.send(:include, Oink::Instrumentation::ActiveRecord)
-      @logger = Hodel3000CompliantLogger.new(logpath)
+    DEFAULT_LOG_PATH = "log/oink.log"
+
+    def initialize(app, options = {})
+      @options = options
+      @options[:log_path] ||= DEFAULT_LOG_PATH
+      @options[:instruments] ||= [:memory, :activerecord]
+      ActiveRecord::Base.send(:include, Oink::Instrumentation::ActiveRecord) if instrumented?(:activerecord)
+      @logger = Hodel3000CompliantLogger.new(@options[:log_path])
       @app = app
     end
 
@@ -15,8 +20,8 @@ module Oink
       status, headers, body = @app.call(env)
       log_routing_information(env)
       @logger.info("Completed in")
-      log_memory_snapshot
-      log_objects_instantiated
+      log_memory_snapshot if instrumented?(:memory)
+      log_objects_instantiated if instrumented?(:activerecord)
       reset_objects_instantiated
       [status, headers, body]
     end
@@ -44,5 +49,10 @@ module Oink
       ActiveRecord::Base.reset_instance_type_count
     end
 
+  private
+
+    def instrumented?(instrument)
+      @options[:instruments].include?(instrument)
+    end
   end
 end
