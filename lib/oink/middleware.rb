@@ -5,10 +5,10 @@ require 'oink/instrumentation'
 module Oink
   class Middleware
 
-    def initialize(app, logger = Hodel3000CompliantLogger.new("oink.log"))
+    def initialize(app, logpath = "log/oink.log")
       ActiveRecord::Base.send(:include, Oink::Instrumentation::ActiveRecord)
+      @logger = Hodel3000CompliantLogger.new(logpath)
       @app = app
-      @logger = logger
     end
 
     def call(env)
