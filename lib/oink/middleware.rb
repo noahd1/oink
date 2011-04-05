@@ -33,7 +33,7 @@ module Oink
       if env.has_key?('action_dispatch.request.parameters')
         controller = env['action_dispatch.request.parameters']['controller']
         action     = env['action_dispatch.request.parameters']['action']
-        @logger.info("Processing #{controller}##{action}")
+        @logger.info("Oink Action: #{controller}##{action}")
       end
     end
 

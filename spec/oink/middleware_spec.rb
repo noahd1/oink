@@ -44,7 +44,7 @@ describe Oink::Middleware do
 
     it "logs the action and controller" do
       get "/no_pigs", {}, {'action_dispatch.request.parameters' => {'controller' => 'oinkoink', 'action' => 'piggie'}}
-      log_output.string.should include("Processing oinkoink#piggie")
+      log_output.string.should include("Oink Action: oinkoink#piggie")
     end
   end
 

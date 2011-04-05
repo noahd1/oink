@@ -26,7 +26,7 @@ module Oink
               @pids[pid][:buffer] << line
             end
 
-            if line =~ /Processing ((\w+)#(\w+)) /
+            if line =~ /Oink Action: ((\w+)#(\w+))/
 
               @pids[pid][:action] = $1
               unless @pids[pid][:request_finished]
