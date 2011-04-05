@@ -26,7 +26,7 @@ module Oink
     end
 
     def log_completed
-      @logger.info("Completed in")
+      @logger.info("Oink Log Entry Complete")
     end
 
     def log_routing(env)

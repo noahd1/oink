@@ -37,9 +37,9 @@ describe Oink::Middleware do
       log_output.string.should include("rails[#{$$}]")
     end
 
-    it "writes 'Completed in' after the request has completed" do
+    it "writes 'Oink Log Entry Complete' after the request has completed" do
       get "/no_pigs"
-      log_output.string.should include("Completed in")
+      log_output.string.should include("Oink Log Entry Complete")
     end
 
     it "logs the action and controller" do

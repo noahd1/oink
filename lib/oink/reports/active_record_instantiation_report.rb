@@ -38,7 +38,7 @@ module Oink
 
               @pids[pid][:ar_count] = $1.to_i
 
-            elsif line =~ /Completed in/
+            elsif line =~ /Oink Log Entry Complete/
 
               if @pids[pid][:ar_count] > @threshold
                 @bad_actions[@pids[pid][:action]] ||= 0

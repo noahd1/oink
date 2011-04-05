@@ -38,7 +38,7 @@ module Oink
               memory_reading = $1.to_i
               @pids[pid][:current_memory_reading] = memory_reading
 
-            elsif line =~ /Completed in/
+            elsif line =~ /Oink Log Entry Complete/
 
               @pids[pid][:request_finished] = true
               unless @pids[pid][:current_memory_reading] == -1 || @pids[pid][:last_memory_reading] == -1
