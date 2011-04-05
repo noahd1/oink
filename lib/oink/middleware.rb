@@ -17,10 +17,9 @@ module Oink
       status, headers, body = @app.call(env)
 
       log_routing(env)
-      log_completed
       log_memory
       log_activerecord
-
+      log_completed
       reset_objects_instantiated
       [status, headers, body]
     end
