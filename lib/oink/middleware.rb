@@ -5,11 +5,9 @@ require 'oink/instrumentation'
 module Oink
   class Middleware
 
-    DEFAULT_LOG_PATH = "log/oink.log"
-
     def initialize(app, options = {})
       @app         = app
-      @log_path    = options[:log_path]    || DEFAULT_LOG_PATH
+      @logger      = options[:logger]      || Hodel3000CompliantLogger.new("log/oink.log")
       @instruments = options[:instruments] || [:memory, :activerecord]
 
       ActiveRecord::Base.send(:include, Oink::Instrumentation::ActiveRecord) if @instruments.include?(:activerecord)
@@ -28,21 +26,21 @@ module Oink
     end
 
     def log_completed
-      logger.info("Completed in")
+      @logger.info("Completed in")
     end
 
     def log_routing(env)
       if env.has_key?('action_dispatch.request.parameters')
         controller = env['action_dispatch.request.parameters']['controller']
         action     = env['action_dispatch.request.parameters']['action']
-        logger.info("Processing #{controller}##{action}")
+        @logger.info("Processing #{controller}##{action}")
       end
     end
 
     def log_memory
       if @instruments.include?(:memory)
         memory = Oink::Instrumentation::MemorySnapshot.memory
-        logger.info("Memory usage: #{memory} | PID: #{$$}")
+        @logger.info("Memory usage: #{memory} | PID: #{$$}")
       end
     end
 
@@ -50,7 +48,7 @@ module Oink
       if @instruments.include?(:activerecord)
         sorted_list = Oink::HashUtils.to_sorted_array(ActiveRecord::Base.instantiated_hash)
         sorted_list.unshift("Total: #{ActiveRecord::Base.total_objects_instantiated}")
-        logger.info("Instantiation Breakdown: #{sorted_list.join(' | ')}")
+        @logger.info("Instantiation Breakdown: #{sorted_list.join(' | ')}")
       end
     end
 
@@ -60,8 +58,5 @@ module Oink
       ActiveRecord::Base.reset_instance_type_count
     end
 
-    def logger
-      @logger ||= Hodel3000CompliantLogger.new(@log_path)
-    end
   end
 end

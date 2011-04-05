@@ -14,28 +14,6 @@ describe "Oink::Middleware configuration" do
   let(:app)         { Oink::Middleware.new(SampleApplication.new, oink_configuration) }
   let(:oink_configuration) { @oink_configuration || {} }
 
-  context "log_path option" do
-    before do
-      Oink::Instrumentation::MemorySnapshot.stub(:memory => 4092)
-      FileUtils.mkdir_p("log")
-    end
-
-    after do
-      FileUtils.remove_dir("log")
-    end
-
-    it "writes to the default log path when not specified" do
-      get "/"
-      File.should exist(Oink::Middleware::DEFAULT_LOG_PATH)
-    end
-
-    it "writes to the log path specified" do
-      @oink_configuration = {:log_path => "log/custom_path.log"}
-      get "/"
-      File.should exist("log/custom_path.log")
-    end
-  end
-
   context "instruments options" do
     before do
       @log_output = StringIO.new
