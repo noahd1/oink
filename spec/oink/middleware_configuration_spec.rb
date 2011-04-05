@@ -40,6 +40,11 @@ describe "Oink::Middleware configuration" do
         ActiveRecord::Base.should_not_receive(:include)
         get "/"
       end
+
+      it "does not call reset_instance_type_count" do
+        ActiveRecord::Base.should_not_receive(:reset_instance_type_count)
+        get "/"
+      end
     end
 
     context "with the activerecord instrument specified" do

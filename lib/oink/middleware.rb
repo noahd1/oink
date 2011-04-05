@@ -54,7 +54,7 @@ module Oink
   private
 
     def reset_objects_instantiated
-      ActiveRecord::Base.reset_instance_type_count
+      ActiveRecord::Base.reset_instance_type_count if @instruments.include?(:activerecord)
     end
 
   end
