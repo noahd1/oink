@@ -20,7 +20,6 @@ module Oink
       log_memory
       log_activerecord
       log_completed
-      reset_objects_instantiated
       [status, headers, body]
     end
 
@@ -48,13 +47,14 @@ module Oink
         sorted_list = Oink::HashUtils.to_sorted_array(ActiveRecord::Base.instantiated_hash)
         sorted_list.unshift("Total: #{ActiveRecord::Base.total_objects_instantiated}")
         @logger.info("Instantiation Breakdown: #{sorted_list.join(' | ')}")
+        reset_objects_instantiated
       end
     end
 
   private
 
     def reset_objects_instantiated
-      ActiveRecord::Base.reset_instance_type_count if @instruments.include?(:activerecord)
+      ActiveRecord::Base.reset_instance_type_count
     end
 
   end
