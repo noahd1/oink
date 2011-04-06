@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{oink}
-  s.version = "0.9.1"
+  s.version = "0.9.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Noah Davis"]
-  s.date = %q{2011-03-24}
+  s.date = %q{2011-04-05}
   s.default_executable = %q{oink}
   s.description = %q{Log parser to identify actions which significantly increase VM heap size}
   s.email = %q{noahd1@yahoo.com}
@@ -51,6 +51,7 @@ Gem::Specification.new do |s|
     "spec/helpers/database.rb",
     "spec/oink/instrumentation/instance_type_counter_spec.rb",
     "spec/oink/instrumentation/memory_snapshot_spec.rb",
+    "spec/oink/middleware_configuration_spec.rb",
     "spec/oink/middleware_spec.rb",
     "spec/oink/rails/instance_type_counter_spec.rb",
     "spec/oink/rails/memory_usage_logger_spec.rb",
