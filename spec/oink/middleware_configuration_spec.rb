@@ -23,7 +23,7 @@ describe "Oink::Middleware configuration" do
 
     context "with the memory instrument specified" do
       before do
-        @oink_configuration = { :instruments => [:memory] }
+        @oink_configuration = { :instruments => :memory }
       end
 
       it "does log memory usage" do
@@ -49,7 +49,7 @@ describe "Oink::Middleware configuration" do
 
     context "with the activerecord instrument specified" do
       before do
-        @oink_configuration = { :instruments => [:activerecord] }
+        @oink_configuration = { :instruments => :activerecord }
         get "/"
       end
 

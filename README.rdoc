@@ -56,11 +56,11 @@ Oink::Middleware logs memory and activerecord usage by default.
 
 You can configure which using the :instruments option. For memory only:
 
-  YourApplication::Application.middleware.use( Oink::Middleware, :instruments => [:memory] )
+  YourApplication::Application.middleware.use( Oink::Middleware, :instruments => :memory )
 
 For activerecord instantiation counts only:
 
-  YourApplication::Application.middleware.use( Oink::Middleware, :instruments => [:activerecord] )
+  YourApplication::Application.middleware.use( Oink::Middleware, :instruments => :activerecord )
 
 Note that the previous way of configuring oink, as a set of modules to include into rails controllers, is deprecated.
 

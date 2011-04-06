@@ -7,8 +7,8 @@ module Oink
 
     def initialize(app, options = {})
       @app         = app
-      @logger      = options[:logger]      || Hodel3000CompliantLogger.new("log/oink.log")
-      @instruments = options[:instruments] || [:memory, :activerecord]
+      @logger      = options[:logger] || Hodel3000CompliantLogger.new("log/oink.log")
+      @instruments = options[:instruments] ? Array(options[:instruments]) : [:memory, :activerecord]
 
       ActiveRecord::Base.send(:include, Oink::Instrumentation::ActiveRecord) if @instruments.include?(:activerecord)
     end
