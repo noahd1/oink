@@ -46,6 +46,11 @@ describe Oink::Middleware do
       get "/no_pigs", {}, {'action_dispatch.request.parameters' => {'controller' => 'oinkoink', 'action' => 'piggie'}}
       log_output.string.should include("Oink Action: oinkoink#piggie")
     end
+
+    it "logs the action and controller within a module" do
+      get "/no_pigs", {}, {'action_dispatch.request.parameters' => {'controller' => 'oinkoink/admin', 'action' => 'piggie'}}
+      log_output.string.should include("Oink Action: oinkoink/admin#piggie")
+    end
   end
 
   it "reports 0 totals" do
