@@ -25,7 +25,7 @@ module Oink
               @pids[pid][:buffer] << line
             end
 
-            if line =~ /Oink Action: ((\w+)#(\w+))/
+            if line =~ /Oink Action: (([\w\/]+)#(\w+))/
 
               unless @pids[pid][:request_finished]
                 @pids[pid][:last_memory_reading] = -1
