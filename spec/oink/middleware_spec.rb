@@ -42,8 +42,13 @@ describe Oink::Middleware do
       log_output.string.should include("Oink Log Entry Complete")
     end
 
-    it "logs the action and controller" do
+    it "logs the action and controller in rails 3.x" do
       get "/no_pigs", {}, {'action_dispatch.request.parameters' => {'controller' => 'oinkoink', 'action' => 'piggie'}}
+      log_output.string.should include("Oink Action: oinkoink#piggie")
+    end
+
+    it "logs the action and controller in rails 2.3.x" do
+      get "/no_pigs", {}, {'action_controller.request.path_parameters' => {'controller' => 'oinkoink', 'action' => 'piggie'}}
       log_output.string.should include("Oink Action: oinkoink#piggie")
     end
 

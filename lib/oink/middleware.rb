@@ -28,9 +28,10 @@ module Oink
     end
 
     def log_routing(env)
-      if env.has_key?('action_dispatch.request.parameters')
-        controller = env['action_dispatch.request.parameters']['controller']
-        action     = env['action_dispatch.request.parameters']['action']
+      routing_info = rails3_routing_info(env) || rails2_routing_info(env)
+      if routing_info
+        controller = routing_info['controller']
+        action     = routing_info['action']
         @logger.info("Oink Action: #{controller}##{action}")
       end
     end
@@ -52,6 +53,14 @@ module Oink
     end
 
   private
+
+    def rails3_routing_info(env)
+      env['action_dispatch.request.parameters']
+    end
+
+    def rails2_routing_info(env)
+      env['action_controller.request.path_parameters']
+    end
 
     def reset_objects_instantiated
       ActiveRecord::Base.reset_instance_type_count
