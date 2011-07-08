@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{oink}
-  s.version = "0.9.2"
+  s.version = "0.9.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Noah Davis"]
-  s.date = %q{2011-04-05}
+  s.date = %q{2011-07-08}
   s.default_executable = %q{oink}
   s.description = %q{Log parser to identify actions which significantly increase VM heap size}
   s.email = %q{noahd1@yahoo.com}
