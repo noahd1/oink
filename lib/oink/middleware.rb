@@ -10,7 +10,7 @@ module Oink
       @logger      = options[:logger] || Hodel3000CompliantLogger.new("log/oink.log")
       @instruments = options[:instruments] ? Array(options[:instruments]) : [:memory, :activerecord]
 
-      ActiveRecord::Base.send(:include, Oink::Instrumentation::ActiveRecord) if @instruments.include?(:activerecord)
+      Oink.extend_active_record! if @instruments.include?(:activerecord)
     end
 
     def call(env)

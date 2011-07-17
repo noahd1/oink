@@ -8,6 +8,12 @@ module Oink
     @oink_extended_active_record = true
   end
 
+  def self.extend_active_record!
+    ::ActiveRecord::Base.class_eval do
+      include Instrumentation::ActiveRecord
+    end
+  end
+
   module Instrumentation
     module ActiveRecord
 
