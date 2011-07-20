@@ -20,25 +20,27 @@ module Oink
       def self.included(klass)
         klass.class_eval do
 
-          @@instantiated = {}
-          @@total = nil
-
           def self.reset_instance_type_count
-            @@instantiated = {}
-            @@total = nil
+            self.instantiated_hash = {}
+            Thread.current['oink.activerecord.instantiations_count'] = nil
           end
 
           def self.increment_instance_type_count
-            @@instantiated[base_class.name] ||= 0
-            @@instantiated[base_class.name] += 1
+            self.instantiated_hash ||= {}
+            self.instantiated_hash[base_class.name] ||= 0
+            self.instantiated_hash[base_class.name] += 1
           end
 
           def self.instantiated_hash
-            @@instantiated
+            Thread.current['oink.activerecord.instantiations']
+          end
+
+          def self.instantiated_hash=(hsh)
+            Thread.current['oink.activerecord.instantiations'] = hsh
           end
 
           def self.total_objects_instantiated
-            @@total ||= @@instantiated.values.sum
+            Thread.current['oink.activerecord.instantiations_count'] ||= self.instantiated_hash.values.sum
           end
 
           unless Oink.extended_active_record?
