@@ -30,7 +30,7 @@ When used as a gem, this is automatically brought in as a dependency.
 
 Add oink to your Gemfile
 
-gem "oink"
+  gem "oink"
 
 In most rails environments this is sufficient and oink will be required for you via bundler.
 If not, add a require statement "require 'oink'" in your app.
