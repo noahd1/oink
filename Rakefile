@@ -1,4 +1,4 @@
-require "rake/gempackagetask"
+require "rubygems/package_task"
 require "rake/clean"
 require "rspec/core/rake_task"
 
