@@ -72,7 +72,8 @@ module Oink
     class SmapsMemorySnapshot
       def memory
         proc_file = File.new("/proc/#{$$}/smaps")
-        proc_file.map do |line|
+        lines = proc_file.lines
+        lines.map do |line|
           size = line[/Size: *(\d+)/, 1] and size.to_i
         end.compact.sum
       end
