@@ -28,12 +28,16 @@ module Oink
       end
 
       def memory
-        wmi = WIN32OLE.connect("winmgmts:root/cimv2")
+        # We can not be sure about the thread in which we are running and if it isn't the app main thread, things could go wrong.
+        WIN32OLE.ole_initialize
+        wmi = WIN32OLE.connect("winmgmts:root\\cimv2")
         mem = 0
         query = "select * from Win32_Process where ProcessID = #{$$}"
         wmi.ExecQuery(query).each do |wproc|
           mem = wproc.WorkingSetSize
         end
+        # Shutdown gracefully
+        WIN32OLE.ole_uninitialize
         mem.to_i / 1000
       end
 
