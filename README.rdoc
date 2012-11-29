@@ -115,6 +115,16 @@ e.g. To find all actions which increase the heap size more than 75 MB, where log
   1, PublicPagesController#join
   1, CommentsController#create
 
+  Aggregated Totals:
+  Action                                  Max     Mean    Min     Total   Number of requests
+  SportsController#show                   101560  19754   4       5590540 283
+  CommentsController#create               8344    701     4       253324  361
+  ColorSchemesController#show             10124   739     4       68756   93
+  PublicPagesController#join              9004    1346    8       51172   38
+  DashboardsController#show               13696   2047    8       45036   22
+  SessionsController#create               9220    528     8       17448   33
+  GroupsController#show                   10748   1314    8       15776   12
+
 e.g. In verbose mode, oink will print out all the log information from your logs about the actions which exceeded the threshold specified
 
   $ oink --format verbose --threshold=75 /tmp/logs/*
