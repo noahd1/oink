@@ -52,6 +52,8 @@ module Oink
                     @pids[pid][:buffer].each { |b| output.puts b }
                     output.puts "---------------------------------------------------------------------"
                   end
+                  @bad_actions_averaged[@pids[pid][:action]] ||= []
+                  @bad_actions_averaged[@pids[pid][:action]] << memory_diff
                 end
               end
 

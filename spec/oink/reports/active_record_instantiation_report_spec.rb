@@ -63,8 +63,8 @@ module Oink::Reports
         io = StringIO.new(str)
         output = PsuedoOutput.new
         ActiveRecordInstantiationReport.new(io, 50).print(output)
-        output[-2].should == "2, Media#show"
-        output[-1].should == "1, Users#show"
+        output[8].should == "2, Media#show"
+        output[9].should == "1, Users#show"
       end
 
       it "should not be bothered by incomplete requests" do

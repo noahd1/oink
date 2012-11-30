@@ -79,8 +79,8 @@ module Oink::Reports
         io = StringIO.new(str)
         output = PsuedoOutput.new
         MemoryUsageReport.new(io, TEN_MEGS).print(output)
-        output[-2].should == "2, Media#show"
-        output[-1].should == "1, Users#show"
+        output[8].should == "2, Media#show"
+        output[9].should == "1, Users#show"
       end
 
       it "should not report actions which do not complete properly" do
@@ -230,6 +230,74 @@ module Oink::Reports
         output = PsuedoOutput.new
         MemoryUsageReport.new(io, TEN_MEGS, :format => :verbose).print(output)
         output[3..5].should == str.split("\n")[6..8].map { |o| o.strip }
+      end
+    end
+
+    describe "averaged format" do
+      it "should correctly calculate the stats for the actions" do
+        str = <<-STR
+        Feb 01 01:59:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+        Feb 01 01:58:29 ey04-s00297 rails[4413]: Oink Action: Users#show
+        Feb 01 01:57:29 ey04-s00297 rails[4413]: Parameters: {"id"=>"2332", "controller"=>"users"}
+        Feb 01 01:57:30 ey04-s00297 rails[4413]: Memory usage: #{TEN_MEGS + 10} | PID: 4413
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Oink Log Entry Complete
+        Feb 01 01:57:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:59:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+        Feb 01 01:58:29 ey04-s00297 rails[4413]: Oink Action: Users#show
+        Feb 01 01:58:29 ey04-s00297 rails[4413]: Parameters: {"id"=>"22900", "controller"=>"media"}
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Memory usage: #{(TEN_MEGS*3) + 40} | PID: 4413
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Oink Log Entry Complete
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:59:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+        Feb 01 01:58:29 ey04-s00297 rails[4413]: Oink Action: Users#show
+        Feb 01 01:59:29 ey04-s00297 rails[4413]: Parameters: {"id"=>"22900", "controller"=>"media"}
+        Feb 01 01:59:30 ey04-s00297 rails[4413]: Memory usage: #{(TEN_MEGS*8) + 40} | PID: 4413
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Oink Log Entry Complete
+        Feb 01 01:59:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        STR
+        io = StringIO.new(str)
+        output = PsuedoOutput.new
+        MemoryUsageReport.new(io, TEN_MEGS, :format => :averaged).print(output)
+        output.last.should == "Users#show\t51200\t35855\t20510\t71710\t2"
+      end
+      it "should sort by the total memory increase" do
+        str = <<-STR
+        Feb 01 01:57:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+        Feb 01 01:58:29 ey04-s00297 rails[4413]: Oink Action: Users#show
+        Feb 01 01:57:29 ey04-s00297 rails[4413]: Parameters: {"id"=>"2332", "controller"=>"users"}
+        Feb 01 01:57:30 ey04-s00297 rails[4413]: Memory usage: #{TEN_MEGS + 10} | PID: 4413
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Oink Log Entry Complete
+        Feb 01 01:57:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:57:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+        Feb 01 01:58:29 ey04-s00297 rails[4413]: Oink Action: Users#show
+        Feb 01 01:57:29 ey04-s00297 rails[4413]: Parameters: {"id"=>"2332", "controller"=>"users"}
+        Feb 01 01:57:30 ey04-s00297 rails[4413]: Memory usage: #{2*(TEN_MEGS + 10)} | PID: 4413
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Oink Log Entry Complete
+        Feb 01 01:57:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 01:58:29 ey04-s00297 rails[4413]: Processing Users#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+        Feb 01 01:58:29 ey04-s00297 rails[4413]: Oink Action: Users#show
+        Feb 01 01:58:29 ey04-s00297 rails[4413]: Parameters: {"id"=>"22900", "controller"=>"media"}
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Memory usage: #{3*(TEN_MEGS + 10)} | PID: 4413
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Oink Log Entry Complete
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 02:57:29 ey04-s00297 rails[4413]: Processing Users2#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+        Feb 01 01:58:29 ey04-s00297 rails[4413]: Oink Action: Users2#show
+        Feb 01 02:57:29 ey04-s00297 rails[4413]: Parameters: {"id"=>"2332", "controller"=>"users"}
+        Feb 01 02:57:30 ey04-s00297 rails[4413]: Memory usage: #{TEN_MEGS + 20} | PID: 4413
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Oink Log Entry Complete
+        Feb 01 02:57:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        Feb 01 02:58:29 ey04-s00297 rails[4413]: Processing Users2#show (for 92.84.151.171 at 2009-02-01 01:58:29) [GET]
+        Feb 01 01:58:29 ey04-s00297 rails[4413]: Oink Action: Users2#show
+        Feb 01 02:58:29 ey04-s00297 rails[4413]: Parameters: {"id"=>"22900", "controller"=>"media"}
+        Feb 01 02:58:30 ey04-s00297 rails[4413]: Memory usage: #{2*(TEN_MEGS + 20)} | PID: 4413
+        Feb 01 01:58:30 ey04-s00297 rails[4413]: Oink Log Entry Complete
+        Feb 01 02:58:30 ey04-s00297 rails[4413]: Completed in 984ms (View: 840, DB: 4) | 200 OK
+        STR
+        io = StringIO.new(str)
+        output = PsuedoOutput.new
+        MemoryUsageReport.new(io, TEN_MEGS, :format => :averaged).print(output)
+        output[12].should include('Users#show')
+        output[13].should include('Users2#show')
       end
     end
 
