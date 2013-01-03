@@ -4,15 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{oink}
-  s.version = "0.9.3"
+  s.name = "oink"
+  s.version = "0.10.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Noah Davis"]
-  s.date = %q{2011-07-08}
-  s.default_executable = %q{oink}
-  s.description = %q{Log parser to identify actions which significantly increase VM heap size}
-  s.email = %q{noahd1@yahoo.com}
+  s.date = "2013-01-03"
+  s.description = "Log parser to identify actions which significantly increase VM heap size"
+  s.email = "noahd1@yahoo.com"
   s.executables = ["oink"]
   s.extra_rdoc_files = [
     "README.rdoc"
@@ -41,26 +40,10 @@ Gem::Specification.new do |s|
     "lib/oink/reports/request.rb",
     "lib/oink/utils/hash_utils.rb"
   ]
-  s.homepage = %q{http://github.com/noahd1/oink}
+  s.homepage = "http://github.com/noahd1/oink"
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.4.2}
-  s.summary = %q{Log parser to identify actions which significantly increase VM heap size}
-  s.test_files = [
-    "spec/fakes/fake_application_controller.rb",
-    "spec/fakes/psuedo_output.rb",
-    "spec/helpers/database.rb",
-    "spec/oink/instrumentation/instance_type_counter_spec.rb",
-    "spec/oink/instrumentation/memory_snapshot_spec.rb",
-    "spec/oink/middleware_configuration_spec.rb",
-    "spec/oink/middleware_spec.rb",
-    "spec/oink/rails/instance_type_counter_spec.rb",
-    "spec/oink/rails/memory_usage_logger_spec.rb",
-    "spec/oink/reports/active_record_instantiation_report_spec.rb",
-    "spec/oink/reports/memory_usage_report_spec.rb",
-    "spec/oink/reports/oinked_request_spec.rb",
-    "spec/oink/reports/priority_queue_spec.rb",
-    "spec/spec_helper.rb"
-  ]
+  s.rubygems_version = "1.8.24"
+  s.summary = "Log parser to identify actions which significantly increase VM heap size"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
@@ -74,6 +57,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<rack-test>, [">= 0"])
       s.add_development_dependency(%q<rake>, [">= 0"])
       s.add_development_dependency(%q<ruby-debug>, [">= 0"])
+      s.add_development_dependency(%q<debugger>, [">= 0"])
     else
       s.add_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
       s.add_dependency(%q<activerecord>, [">= 0"])
@@ -83,6 +67,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rack-test>, [">= 0"])
       s.add_dependency(%q<rake>, [">= 0"])
       s.add_dependency(%q<ruby-debug>, [">= 0"])
+      s.add_dependency(%q<debugger>, [">= 0"])
     end
   else
     s.add_dependency(%q<hodel_3000_compliant_logger>, [">= 0"])
@@ -93,6 +78,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rack-test>, [">= 0"])
     s.add_dependency(%q<rake>, [">= 0"])
     s.add_dependency(%q<ruby-debug>, [">= 0"])
+    s.add_dependency(%q<debugger>, [">= 0"])
   end
 end
 
