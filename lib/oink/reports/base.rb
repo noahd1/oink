@@ -13,6 +13,7 @@ module Oink
 
         @pids = {}
         @bad_actions = {}
+        @bad_actions_averaged = {}
         @bad_requests = PriorityQueue.new(10)
       end
 
@@ -32,6 +33,25 @@ module Oink
         @bad_actions.sort{|a,b| b[1]<=>a[1]}.each { |elem|
           output.puts "#{elem[1]}, #{elem[0]}"
         }
+        output.puts "\nAggregated Totals:\n"
+        if @bad_actions_averaged.length > 0
+          action_stats =  @bad_actions_averaged.map { |action,values|
+            total = values.inject(0){ |sum,x| sum+x }
+            {
+              :action => action,
+              :total => total,
+              :mean => total/values.length,
+              :max => values.max,
+              :min => values.min,
+              :count => values.length,
+            }
+          }
+          action_width = @bad_actions_averaged.keys.map{|k| k.length}.max
+          output.puts "#{'Action'.ljust(action_width)}\tMax\tMean\tMin\tTotal\tNumber of requests"
+          action_stats.sort{|a,b| b[:total]<=>a[:total]}.each do |action_stat|
+            output.puts "#{action_stat[:action].ljust(action_width)}\t#{action_stat[:max]}\t#{action_stat[:mean]}\t#{action_stat[:min]}\t#{action_stat[:total]}\t#{action_stat[:count]}"
+          end
+        end
       end
     end
   end
