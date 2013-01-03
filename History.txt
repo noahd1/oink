@@ -1,3 +1,33 @@
+=== 0.10.0 / 2013-01-03
+
+* Additional summary information (average, max, min, total, number requests) (bjpirt)
+
+=== 0.9.3 / 2011-07-08
+
+* (BUGFIX) Correctly log a controller action that lives in a module (wagner)
+* (BUGFIX) Log fix for Rails 2.3.x (yar)
+
+=== 0.9.2 / 2011-04-05
+
+* More configurable middleware (noahd1, edsinclair)
+* Update license (still MIT) (noahd1)
+
+=== 0.9.1 / 2011-03-23
+
+* Remove unnecessary dependency (noahd1)
+
+=== 0.9.0 / 2011-03-23
+
+* Introduce middleware and deprecate controller modules (noahd1, edsinclair)
+
+=== 0.1.2 / 2010-10-08
+
+* Prefer statm to smaps (jordan-brough)
+
+=== 0.1.1 / 2010-09-30
+
+* Dependency fixes
+
 === 0.1.0 / 2009-02-09
 
 * 1st release
