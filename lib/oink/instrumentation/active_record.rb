@@ -32,7 +32,7 @@ module Oink
           end
 
           def self.instantiated_hash
-            Thread.current['oink.activerecord.instantiations']
+            Thread.current['oink.activerecord.instantiations'] ||= {}
           end
 
           def self.instantiated_hash=(hsh)
