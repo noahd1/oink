@@ -6,7 +6,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name         = "oink"
-    s.version      = "0.10.0"
+    s.version      = "0.10.1"
     s.author       = "Noah Davis"
     s.email        = "noahd1" + "@" + "yahoo.com"
     s.homepage     = "http://github.com/noahd1/oink"

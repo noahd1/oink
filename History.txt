@@ -1,3 +1,7 @@
+=== 0.10.1 / 2013-01-30
+
+* (BUGFIX) Do not blow up if no active record objects were instantiated (gabecoyne) (Github Issue #23)
+
 === 0.10.0 / 2013-01-03
 
 * Additional summary information (average, max, min, total, number requests) (bjpirt)
