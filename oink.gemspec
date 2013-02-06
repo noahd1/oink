@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Noah Davis"]
-  s.date = "2013-01-30"
+  s.date = "2013-02-06"
   s.description = "Log parser to identify actions which significantly increase VM heap size"
   s.email = "noahd1@yahoo.com"
   s.executables = ["oink"]
