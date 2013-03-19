@@ -97,6 +97,7 @@ module Oink
 
       def initialize(cmd)
         @stdout = `#{cmd}`
+        @process_status = $?
       end
 
       def self.execute(cmd)
@@ -108,7 +109,7 @@ module Oink
       end
 
       def success?
-        $?.success?
+        @process_status.success?
       end
 
     end
