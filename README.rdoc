@@ -1,3 +1,5 @@
+{<img src="https://codeclimate.com/github/noahd1/oink.png" />}[https://codeclimate.com/github/noahd1/oink]
+
 === Oink
 
 * http://github.com/noahd1/oink
