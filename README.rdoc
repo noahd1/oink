@@ -44,13 +44,13 @@ the middleware.
 
 The middleware class to include into your stack is "Oink::Middleware". For rails using an initializer is recommended:
 
-  YourApplication::Application.middleware.use Oink::Middleware
+  Rails.application.middleware.use Oink::Middleware
 
 Oink::Middleware writes log entries to log/oink.log in your application root directory by default.
 
 You can also initialize it with an optional logger instance enabling your application to write Oink log entries to your application's default log file:
 
-  YourApplication::Application.middleware.use( Oink::Middleware, :logger => Rails.logger )
+  Rails.application.middleware.use( Oink::Middleware, :logger => Rails.logger )
 
 (This setup enables Oink to work with Request Log Analyzer (https://github.com/wvanbergen/request-log-analyzer), which currently parses rails logs)
 
@@ -58,11 +58,11 @@ Oink::Middleware logs memory and activerecord usage by default.
 
 You can configure which using the :instruments option. For memory only:
 
-  YourApplication::Application.middleware.use( Oink::Middleware, :instruments => :memory )
+  Rails.application.middleware.use( Oink::Middleware, :instruments => :memory )
 
 For activerecord instantiation counts only:
 
-  YourApplication::Application.middleware.use( Oink::Middleware, :instruments => :activerecord )
+  Rails.application.middleware.use( Oink::Middleware, :instruments => :activerecord )
 
 Note that the previous way of configuring oink, as a set of modules to include into rails controllers, is deprecated.
 
