@@ -12,3 +12,5 @@ group :development do
   gem "ruby-debug",   :platforms => :ruby_18
   gem "debugger",     :platforms => :ruby_19
 end
+
+gem "codeclimate-test-reporter", group: :test, require: nil, github: "codeclimate/ruby-test-reporter"
