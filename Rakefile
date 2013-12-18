@@ -10,6 +10,7 @@ begin
     s.author       = "Noah Davis"
     s.email        = "noahd1" + "@" + "yahoo.com"
     s.homepage     = "http://github.com/noahd1/oink"
+    s.license      = "MIT"
     s.summary      = "Log parser to identify actions which significantly increase VM heap size"
     s.description  = s.summary
     s.executables  = "oink"
