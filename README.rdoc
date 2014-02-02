@@ -54,6 +54,10 @@ You can also initialize it with an optional logger instance enabling your applic
 
 (This setup enables Oink to work with Request Log Analyzer (https://github.com/wvanbergen/request-log-analyzer), which currently parses rails logs)
 
+You can also initialize it with an optional boolean path variable enabling Oink to log entries with the request path info(env['PATH_INFO']) instead of the controller/action:
+
+  Rails.application.middleware.use( Oink::Middleware, :path => true )
+
 Oink::Middleware logs memory and activerecord usage by default.
 
 You can configure which using the :instruments option. For memory only:

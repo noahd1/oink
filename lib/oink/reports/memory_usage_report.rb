@@ -25,12 +25,12 @@ module Oink
               @pids[pid][:buffer] << line
             end
 
-            if line =~ /Oink Action: (([\w\/]+)#(\w+))/
+            if line =~ /Oink (Action|Path): (.*)/
 
               unless @pids[pid][:request_finished]
                 @pids[pid][:last_memory_reading] = -1
               end
-              @pids[pid][:action] = $1
+              @pids[pid][:action] = $2
               @pids[pid][:request_finished] = false
 
             elsif line =~ /Memory usage: (\d+) /

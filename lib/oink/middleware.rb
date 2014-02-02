@@ -7,6 +7,7 @@ module Oink
 
     def initialize(app, options = {})
       @app         = app
+      @path        = options[:path] || false
       @logger      = options[:logger] || Hodel3000CompliantLogger.new("log/oink.log")
       @instruments = options[:instruments] ? Array(options[:instruments]) : [:memory, :activerecord]
 
@@ -28,11 +29,13 @@ module Oink
     end
 
     def log_routing(env)
-      routing_info = rails3_routing_info(env) || rails2_routing_info(env)
-      if routing_info
-        controller = routing_info['controller']
-        action     = routing_info['action']
-        @logger.info("Oink Action: #{controller}##{action}")
+      info = rails3_routing_info(env) || rails2_routing_info(env)
+      if info
+        if @path && info[:path_info]
+          @logger.info("Oink Path: #{info[:path_info]}")
+        elsif info[:request]
+          @logger.info("Oink Action: #{info[:request]['controller']}##{info[:request]['action']}")
+        end
       end
     end
 
@@ -55,11 +58,25 @@ module Oink
   private
 
     def rails3_routing_info(env)
-      env['action_dispatch.request.parameters']
+      if env['action_dispatch.request.parameters']
+        {
+          :request => env['action_dispatch.request.parameters'],
+          :path_info => env['PATH_INFO'],
+        }
+      else
+        nil
+      end
     end
 
     def rails2_routing_info(env)
-      env['action_controller.request.path_parameters']
+      if env['action_controller.request.path_parameters']
+        {
+          :request => env['action_controller.request.path_parameters'],
+          :path_info => env['PATH_INFO'],
+        }
+      else
+        nil
+      end
     end
 
     def reset_objects_instantiated

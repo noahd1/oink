@@ -61,5 +61,20 @@ describe "Oink::Middleware configuration" do
         @log_output.string.should include("Instantiation Breakdown:")
       end
     end
+
+    context "with the path set to true" do
+      before do
+        @oink_configuration = { :path => true }
+        get "/no_pigs", {}, {'action_dispatch.request.parameters' => {'controller' => 'oinkoink', 'action' => 'piggie'}}
+      end
+
+      it "logs the path " do
+        @log_output.string.should include("Oink Path: /no_pigs")
+      end
+
+      it "does not log the action and controller " do
+        @log_output.string.should_not include("Oink Action:")
+      end
+    end
   end
 end
