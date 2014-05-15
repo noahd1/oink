@@ -15,9 +15,9 @@ RSpec.configure do |config|
 
   config.before :suite do
     setup_memory_database
+
     Pig = Class.new(ActiveRecord::Base)
     Pen = Class.new(ActiveRecord::Base)
     Pig.belongs_to :pen
   end
-
 end

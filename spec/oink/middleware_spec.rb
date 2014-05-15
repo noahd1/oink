@@ -16,6 +16,15 @@ describe Oink::Middleware do
         Pig.create(:name => "Babe")
         Pen.create(:location => "Backyard")
         Pig.first
+
+      when "/mm_no_pigs"
+      when "/mm_two_pigs"
+        MMPig.create(:name => "Babe")
+        MMPig.first
+      when "/mm_two_pigs_in_a_pen"
+        MMPig.create(:name => "Babe")
+        MMPen.create(:location => "Backyard")
+        MMPig.first
       end
       [200, {}, ""]
     end
@@ -58,25 +67,78 @@ describe Oink::Middleware do
     end
   end
 
-  it "reports 0 totals" do
-    get "/no_pigs"
-    log_output.string.should include("Instantiation Breakdown: Total: 0")
+  describe "for active record" do
+    let(:app)         { Oink::Middleware.new(SampleApplication.new, :logger => logger, :instruments => [:memory, :activerecord]) }
+
+    it "reports 0 totals" do
+      get "/no_pigs"
+      log_output.string.should include("ActiveRecord Instantiation Breakdown: Total: 0")
+    end
+
+    it "reports totals first even if it's a tie" do
+      get "/two_pigs"
+      log_output.string.should include("ActiveRecord Instantiation Breakdown: Total: 2 | Pig: 2")
+    end
+
+    it "reports pigs and pens instantiated" do
+      get "/two_pigs_in_a_pen"
+      log_output.string.should include("ActiveRecord Instantiation Breakdown: Total: 3 | Pig: 2 | Pen: 1")
+    end
+
+    it "logs memory usage" do
+      Oink::Instrumentation::MemorySnapshot.should_receive(:memory).and_return(4092)
+      get "/two_pigs_in_a_pen"
+      log_output.string.should include("Memory usage: 4092 | PID: #{$$}")
+    end
   end
 
-  it "reports totals first even if it's a tie" do
-    get "/two_pigs"
-    log_output.string.should include("Instantiation Breakdown: Total: 2 | Pig: 2")
-  end
+  describe "for mongo mapper" do
+    def define_class(class_name, &block)
+      if Object.const_defined?(class_name)
+        Object.send(:remove_const, class_name)
+      end
 
-  it "reports pigs and pens instantiated" do
-    get "/two_pigs_in_a_pen"
-    log_output.string.should include("Instantiation Breakdown: Total: 3 | Pig: 2 | Pen: 1")
-  end
+      Object.const_set(class_name, Class.new(&block))
+    end
 
-  it "logs memory usage" do
-    Oink::Instrumentation::MemorySnapshot.should_receive(:memory).and_return(4092)
-    get "/two_pigs_in_a_pen"
-    log_output.string.should include("Memory usage: 4092 | PID: #{$$}")
-  end
+    def define_classes
+      define_class :MMPig do
+        include MongoMapper::Document
+        belongs_to :pen, :class_name => "MMPen"
+      end
 
+      define_class :MMPen do
+        include MongoMapper::Document
+      end
+    end
+
+    let(:app) { Oink::Middleware.new(SampleApplication.new, :logger => logger, :instruments => [:memory, :mongomapper]) }
+
+    before :each do
+      define_classes
+      MMPig.delete_all
+      MMPen.delete_all
+    end
+
+    it "reports 0 totals" do
+      get "/mm_no_pigs"
+      log_output.string.should include("MongoMapper Instantiation Breakdown: Total: 0")
+    end
+
+    it "reports totals first even if it's a tie" do
+      get "/mm_two_pigs"
+      log_output.string.should include("MongoMapper Instantiation Breakdown: Total: 2 | MMPig: 2")
+    end
+
+    it "reports pigs and pens instantiated" do
+      get "/mm_two_pigs_in_a_pen"
+      log_output.string.should include("MongoMapper Instantiation Breakdown: Total: 3 | MMPig: 2 | MMPen: 1")
+    end
+
+    it "logs memory usage" do
+      Oink::Instrumentation::MemorySnapshot.should_receive(:memory).and_return(4092)
+      get "/mm_two_pigs_in_a_pen"
+      log_output.string.should include("Memory usage: 4092 | PID: #{$$}")
+    end
+  end
 end

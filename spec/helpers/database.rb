@@ -1,4 +1,5 @@
 require 'active_record'
+require 'mongo_mapper'
 
 def setup_memory_database
   ActiveRecord::Base.establish_connection(
@@ -17,4 +18,7 @@ def setup_memory_database
       t.string "location"
     end
   end
+
+  MongoMapper.connection = Mongo::Connection.new('localhost')
+  MongoMapper.database = "oink"
 end
