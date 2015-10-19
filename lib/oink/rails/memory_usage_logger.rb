@@ -16,7 +16,7 @@ module Oink
         begin
           memory_usage = Instrumentation::MemorySnapshot.memory
           logger.info("Memory usage: #{memory_usage} | PID: #{$$}")
-        rescue Oink::Instrumentation::MemoryDataUnavailableError => e
+        rescue Oink::Instrumentation::MemoryDataUnavailableError
           logger.error("Oink unable to retrieve memory on this system. See Oink::MemorySnapshot in source.")
         end
       end
