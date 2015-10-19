@@ -2,8 +2,9 @@
 engines:
   rubocop:
     enabled: true
-  fixme:
-    enabled: true
+    checks:
+      Rubocop/Lint/UnusedBlockArgument:
+        enabled: false
 ratings:
   paths:
   - "**.rb"
