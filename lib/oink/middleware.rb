@@ -11,6 +11,7 @@ module Oink
       @instruments = options[:instruments] ? Array(options[:instruments]) : [:memory, :activerecord]
 
       Oink.extend_active_record! if @instruments.include?(:activerecord)
+      Oink.extend_mongo_mapper! if @instruments.include?(:mongomapper)
     end
 
     def call(env)
@@ -19,6 +20,7 @@ module Oink
       log_routing(env)
       log_memory
       log_activerecord
+      log_mongomapper
       log_completed
       [status, headers, body]
     end
@@ -47,8 +49,17 @@ module Oink
       if @instruments.include?(:activerecord)
         sorted_list = Oink::HashUtils.to_sorted_array(ActiveRecord::Base.instantiated_hash)
         sorted_list.unshift("Total: #{ActiveRecord::Base.total_objects_instantiated}")
-        @logger.info("Instantiation Breakdown: #{sorted_list.join(' | ')}")
-        reset_objects_instantiated
+        @logger.info("ActiveRecord Instantiation Breakdown: #{sorted_list.join(' | ')}")
+        reset_active_record_objects_instantiated
+      end
+    end
+
+    def log_mongomapper
+      if @instruments.include?(:mongomapper)
+        sorted_list = Oink::HashUtils.to_sorted_array(Oink::Instrumentation::MongoMapper.instantiated_hash)
+        sorted_list.unshift("Total: #{Oink::Instrumentation::MongoMapper.total_objects_instantiated}")
+        @logger.info("MongoMapper Instantiation Breakdown: #{sorted_list.join(' | ')}")
+        reset_mongo_mapper_objects_instantiated
       end
     end
 
@@ -62,9 +73,12 @@ module Oink
       env['action_controller.request.path_parameters']
     end
 
-    def reset_objects_instantiated
+    def reset_active_record_objects_instantiated
       ActiveRecord::Base.reset_instance_type_count
     end
 
+    def reset_mongo_mapper_objects_instantiated
+      Oink::Instrumentation::MongoMapper.reset_instance_type_count
+    end
   end
 end
