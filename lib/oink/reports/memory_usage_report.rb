@@ -14,7 +14,7 @@ module Oink
 
         @inputs.each do |input|
           input.each_line do |line|
-            line = line.strip
+            line = scrub(line.strip)
 
              # Skip this line since we're only interested in the Hodel 3000 compliant lines
             next unless line =~ HODEL_LOG_FORMAT_REGEX
@@ -67,6 +67,12 @@ module Oink
 
         print_summary(output)
 
+      end
+
+      private
+
+      def scrub(str)
+        String.instance_methods.include?(:scrub) ? str.scrub : str
       end
     end
   end
