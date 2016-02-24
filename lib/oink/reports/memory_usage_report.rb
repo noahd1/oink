@@ -19,7 +19,7 @@ module Oink
              # Skip this line since we're only interested in the Hodel 3000 compliant lines
             next unless line =~ HODEL_LOG_FORMAT_REGEX
 
-            if line =~ /rails\[(\d+)\]/
+            if line =~ /rails\[([\d:]+)\]/
               pid = $1
               @pids[pid] ||= { :buffer => [], :last_memory_reading => -1, :current_memory_reading => -1, :action => "", :request_finished => true }
               @pids[pid][:buffer] << line
