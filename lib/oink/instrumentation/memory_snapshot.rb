@@ -28,12 +28,17 @@ module Oink
       end
 
       def memory
-        wmi = WIN32OLE.connect("winmgmts:root/cimv2")
+# TODO: I know that doing this is not ideal, but i don't know about clean way how to check if OLE has been initialized. Somethink like WIN32OLE.ole_initialized? would be just nice, but this method don't exist.
+#So, we have to call initialize to solve threading issues.
+WIN32OLE.ole_initialize         
+        wmi = WIN32OLE.connect("winmgmts:root\\cimv2")
         mem = 0
         query = "select * from Win32_Process where ProcessID = #{$$}"
         wmi.ExecQuery(query).each do |wproc|
           mem = wproc.WorkingSetSize
         end
+        # I am frightened of this, but we have to clean up. Consequences in main thread which is using OLE could be... Say unknown.
+        WIN32OLE.ole_uninitialize
         mem.to_i / 1000
       end
 
