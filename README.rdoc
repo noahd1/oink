@@ -64,6 +64,10 @@ For activerecord instantiation counts only:
 
   Rails.application.middleware.use( Oink::Middleware, :instruments => :activerecord )
 
+Environment variables can also be logged by specifying `env_vars`. This is especially handy for displaying request ID or REQUEST_URI from the Rails `env` object.
+
+  Rails.application.middleware.use( Oink::Middleware, :env_vars => ['action_dispatch.request_id', 'REQUEST_ID'] )
+
 Note that the previous way of configuring oink, as a set of modules to include into rails controllers, is deprecated.
 
 == Analyzing logs
