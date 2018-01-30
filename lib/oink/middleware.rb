@@ -40,10 +40,11 @@ module Oink
 
     def log_environment(env)
       return if @env_vars.empty?
-      env_message = @env_vars.map { |key|
+      env_message = @env_vars.map do |key|
         value = env[key]
-        "#{key.inspect}: #{value.inspect if value && value.respond_to?(:inspect)}"
-      }.join(', ')
+        display_value = value.inspect if value && value.respond_to?(:inspect)
+        "#{key.inspect}: #{display_value}"
+      end.join(', ')
       @logger.info("Environment: {#{env_message}}")
     end
 
