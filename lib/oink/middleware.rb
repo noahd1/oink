@@ -9,6 +9,7 @@ module Oink
       @app         = app
       @logger      = options[:logger] || Hodel3000CompliantLogger.new("log/oink.log")
       @instruments = options[:instruments] ? Array(options[:instruments]) : [:memory, :activerecord]
+      @env_vars    = options[:env_vars] ? Array(options[:env_vars]) : []
 
       Oink.extend_active_record! if @instruments.include?(:activerecord)
     end
@@ -17,6 +18,7 @@ module Oink
       status, headers, body = @app.call(env)
 
       log_routing(env)
+      log_environment(env)
       log_memory
       log_activerecord
       log_completed
@@ -34,6 +36,16 @@ module Oink
         action     = routing_info['action']
         @logger.info("Oink Action: #{controller}##{action}")
       end
+    end
+
+    def log_environment(env)
+      return if @env_vars.empty?
+      env_message = @env_vars.map do |key|
+        value = env[key]
+        display_value = value.inspect if value && value.respond_to?(:inspect)
+        "#{key.inspect}: #{display_value}"
+      end.join(', ')
+      @logger.info("Environment: {#{env_message}}")
     end
 
     def log_memory
