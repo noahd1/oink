@@ -58,6 +58,17 @@ describe Oink::Middleware do
     end
   end
 
+  context "include specified environment variables in the oink log" do
+    let(:app) do
+      Oink::Middleware.new(SampleApplication.new, :logger => logger, :env_vars => ['action_dispatch.request_id'])
+    end
+
+    it "includes specified environment variables" do
+      get "/no_pigs", {}, {"action_dispatch.request_id" => "4cc822f8-0d85-4d80-bcae-d94a4567e06c"}
+      log_output.string.should include('Environment: {"action_dispatch.request_id": "4cc822f8-0d85-4d80-bcae-d94a4567e06c"}')
+    end
+  end
+
   it "reports 0 totals" do
     get "/no_pigs"
     log_output.string.should include("Instantiation Breakdown: Total: 0")
